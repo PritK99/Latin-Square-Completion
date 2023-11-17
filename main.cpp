@@ -2,7 +2,7 @@
 #include <map>
 #include <vector>
 #include <set>
-#include <random>
+#include <random>   
 #include <algorithm>
 
 using namespace std;
@@ -60,12 +60,26 @@ class LSC : public Graph {
                     add_edge({i, j}, {i, k});
                     add_edge({j, i}, {k, i});
                 }
-                Cand_set.push_back({i, j});
-                for (int k=0; k<x; k++) {
-                    D[{i, j}].insert(k+1);
+                if (square[i][j] <= 0) {
+                    Cand_set.push_back({i, j});
+                    for (int k=0; k<x; k++) {
+                        D[{i, j}].insert(k+1);
+                    }
                 }
             }
         }
+
+        for (int i=0; i<x; i++) {
+            for (int j=0; j<x; j++) {
+                if (square[i][j] > 0) {
+                    for (auto It : adj_list[{i, j}]) {
+                        D[It].erase(square[i][j]);
+                    }
+                    V[square[i][j]].insert({i, j});
+                }
+            }
+        }
+
         // Randomly assign color sets
         shuffle(Cand_set.begin(), Cand_set.end(), default_random_engine(time(0)));
         srand(time(0));
@@ -119,13 +133,15 @@ class LSC : public Graph {
             cout << "\n";
         }
     }
+
+    void MoveGen();
 };
 
 int main() {
     LSC test(
-        {{-1, -1, -1},
-         {-1, -1, -1},
-         {-1, -1, -1}
+        {{2, 0, 0},
+         {0, 3, 0},
+         {0, 0, 0}
         }
     );
     // test.print_graph();
