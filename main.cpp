@@ -4,6 +4,7 @@
 #include <set>
 #include <random>   
 #include <algorithm>
+#include <queue>
 
 using namespace std;
 
@@ -68,7 +69,8 @@ class LSC : public Graph {
                 }
             }
         }
-
+        
+        // Conf for already filled cells
         for (int i=0; i<x; i++) {
             for (int j=0; j<x; j++) {
                 if (square[i][j] > 0) {
@@ -98,6 +100,14 @@ class LSC : public Graph {
             }
         }
     } 
+
+    void operator=(LSC& rhs) {
+        n = rhs.n;
+        adj_list = rhs.adj_list;
+        square = rhs.square;
+        V = rhs.V;
+        D = rhs.D;
+    }
 
     void Move(pair<int, int> v, int color1, int color2) {
         V[color1].erase(v);
@@ -134,8 +144,82 @@ class LSC : public Graph {
         }
     }
 
-    void MoveGen();
+    bool GoalTest() {
+        int x = square.size();
+        bool filled = true;
+        for (int i=0; i<x; i++) {
+            for (int j=0; j<x; j++) {
+                if (square[i][j] == 0) {
+                    filled = false;
+                    break;
+                }
+            }
+        }
+
+        if (filled && CL() == 0) {
+            return true;
+        }
+        return false;
+    }
+
+    void MoveGen(queue<LSC>& Q, map<vector<vector<int>>, int>& visited);
 };
+
+void LSC::MoveGen(queue<LSC>& Q, map<vector<vector<int>>, int>& visited) {
+    vector<int> colors;
+    for (int i=1; i<=square.size(); i++) {
+        colors.push_back(i);
+    }
+    for (auto& color_set: V) {
+        for (auto& cell: color_set.second) {
+            for (auto& color_next: colors) {
+                if (color_next != color_set.first) {
+                    LSC neigh;
+                    neigh.n = n;
+                    neigh.adj_list = adj_list;
+                    neigh.square = square;
+                    neigh.V = V;
+                    neigh.D = D;
+                    neigh.Move(cell, color_set.first, color_next);
+                    if (visited[neigh.square] != 1) {
+                        Q.push(neigh);
+                    }
+                }
+            }
+        }
+    }
+}
+
+void BFS(LSC S) {
+    int steps = 0;
+    queue<LSC> Open;
+    Open.push(S);
+    bool solved = false;
+
+    map<vector<vector<int>>, int> Close;
+    LSC curr;
+
+    while(!Open.empty()) {
+        steps++;
+        curr = Open.front();
+        curr.printSquare();
+        cout << "\n";
+        Open.pop();
+        if (curr.GoalTest()) {
+            solved = true;
+            break;
+        }
+        Close[curr.square]++;
+
+        curr.MoveGen(Open, Close);
+    }
+
+    cout << "Soln\n";
+    if (solved) {
+        cout << "Steps taken: " << steps << "\n";
+        curr.printSquare();
+    }
+}
 
 int main() {
     LSC test(
@@ -144,8 +228,7 @@ int main() {
          {0, 0, 0}
         }
     );
-    // test.print_graph();
-    test.printSquare();
-    cout << test.CL() << "\n";
+
+    BFS(test);
     return 0;
 }
