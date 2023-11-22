@@ -5,6 +5,7 @@
 #include <random>   
 #include <algorithm>
 #include <queue>
+#include <stack>
 
 using namespace std;
 
@@ -163,9 +164,35 @@ class LSC : public Graph {
     }
 
     void MoveGen(queue<LSC>& Q, map<vector<vector<int>>, int>& visited);
+    void MoveGen(stack<LSC>& Q, map<vector<vector<int>>, int>& visited);
 };
 
 void LSC::MoveGen(queue<LSC>& Q, map<vector<vector<int>>, int>& visited) {
+    vector<int> colors;
+    for (int i=1; i<=square.size(); i++) {
+        colors.push_back(i);
+    }
+    for (auto& color_set: V) {
+        for (auto& cell: color_set.second) {
+            for (auto& color_next: colors) {
+                if (color_next != color_set.first) {
+                    LSC neigh;
+                    neigh.n = n;
+                    neigh.adj_list = adj_list;
+                    neigh.square = square;
+                    neigh.V = V;
+                    neigh.D = D;
+                    neigh.Move(cell, color_set.first, color_next);
+                    if (visited[neigh.square] != 1) {
+                        Q.push(neigh);
+                    }
+                }
+            }
+        }
+    }
+}
+
+void LSC::MoveGen(stack<LSC>& Q, map<vector<vector<int>>, int>& visited) {
     vector<int> colors;
     for (int i=1; i<=square.size(); i++) {
         colors.push_back(i);
@@ -221,6 +248,37 @@ void BFS(LSC S) {
     }
 }
 
+void DFS(LSC S) {
+    int steps = 0;
+    stack<LSC> Open;
+    Open.push(S);
+    bool solved = false;
+
+    map<vector<vector<int>>, int> Close;
+    LSC curr;
+
+    while(!Open.empty()) {
+        steps++;
+        curr = Open.top();
+        curr.printSquare();
+        cout << "\n";
+        Open.pop();
+        if (curr.GoalTest()) {
+            solved = true;
+            break;
+        }
+        Close[curr.square]++;
+
+        curr.MoveGen(Open, Close);
+    }
+
+    cout << "Soln\n";
+    if (solved) {
+        cout << "Steps taken: " << steps << "\n";
+        curr.printSquare();
+    }
+}
+
 int main() {
     LSC test(
         {{2, 0, 0},
@@ -229,6 +287,7 @@ int main() {
         }
     );
 
-    BFS(test);
+    // BFS(test);
+    DFS(test);
     return 0;
 }
