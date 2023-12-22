@@ -106,14 +106,6 @@ class LSC : public Graph {
         }
     } 
 
-    void operator=(LSC& rhs) {
-        n = rhs.n;
-        adj_list = rhs.adj_list;
-        square = rhs.square;
-        V = rhs.V;
-        D = rhs.D;
-    }
-
     void Move(pair<int, int> v, int color1, int color2) {
         V[color1].erase(v);
         V[color2].insert(v);
@@ -150,26 +142,11 @@ class LSC : public Graph {
     }
 
     bool GoalTest() {
-        int x = square.size();
-        bool filled = true;
-        for (int i=0; i<x; i++) {
-            for (int j=0; j<x; j++) {
-                if (square[i][j] == 0) {
-                    filled = false;
-                    break;
-                }
-            }
-        }
-
-        if (filled && CL() == 0) {
+        if (CL() == 0) {
             return true;
         }
         return false;
     }
-
-    // bool operator=(LSC rhs) {
-    //     if ()
-    // }
 
     void MoveGen(queue<LSC>& Q, map<vector<vector<int>>, int>& visited);
     void MoveGen(stack<LSC>& Q, map<vector<vector<int>>, int>& visited);
@@ -185,7 +162,7 @@ void clearpq(priority_queue<T, S, C>& q){
 class Compare {
     public:
         bool operator() (const pair<LSC, int>& a, const pair<LSC, int>& b) {
-            return (a.second > b.second);
+            return (a.second < b.second);
         }
 };
 
@@ -256,8 +233,7 @@ void LSC::MoveGen(priority_queue<pair<LSC, int>, vector<pair<LSC, int>>, Compare
                     neigh.D = D;
                     neigh.Move(cell, color_set.first, color_next);
                     if (visited[neigh.square] != 1) {
-                        clearpq(Q);
-                        Q.push({neigh, this->CL() - neigh.CL()});
+                        Q.push({neigh, CL() - neigh.CL()});
                     }
                 }
             }
@@ -327,7 +303,34 @@ void DFS(LSC S) {
     }
 }
 
+void BestFS(LSC S) {
+    int steps = 0;
+    priority_queue<pair<LSC, int>, vector<pair<LSC, int>>, Compare> Open;
+    Open.push({S, S.CL()});
+    bool solved = false;
 
+    map<vector<vector<int>>, int> Close;
+
+    while(!Open.empty()) {
+        steps++;
+        auto curr = Open.top();
+        // curr.first.printSquare();
+        cout << curr.second << "\n";
+        Open.pop();
+        if (curr.first.GoalTest()) {
+            solved = true;
+            break;
+        }
+        Close[curr.first.square]++;
+
+        curr.first.MoveGen(Open, Close);
+    }
+
+    cout << "Soln\n";
+    if (solved) {
+        cout << "Steps taken: " << steps << "\n";
+    }
+}
 
 int main() {
     LSC test(
@@ -338,8 +341,9 @@ int main() {
     );
     std::chrono::time_point<std::chrono::system_clock> start, end;
     start = std::chrono::system_clock::now();
-    BFS(test);
+    // BFS(test);
     // DFS(test);
+    BestFS(test);
     end = std::chrono::system_clock::now();
     std::chrono::duration<double> elapsed_seconds = end - start;
     std::time_t end_time = std::chrono::system_clock::to_time_t(end);
