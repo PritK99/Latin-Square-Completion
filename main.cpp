@@ -6,8 +6,12 @@
 #include <algorithm>
 #include <queue>
 #include <stack>
+#include <chrono>
+#include <ctime>
 
 using namespace std;
+
+class Compare;
 
 template <typename T>
 bool find(vector<T>& v, T e) {
@@ -163,8 +167,26 @@ class LSC : public Graph {
         return false;
     }
 
+    // bool operator=(LSC rhs) {
+    //     if ()
+    // }
+
     void MoveGen(queue<LSC>& Q, map<vector<vector<int>>, int>& visited);
     void MoveGen(stack<LSC>& Q, map<vector<vector<int>>, int>& visited);
+    void MoveGen(priority_queue<pair<LSC, int>, vector<pair<LSC, int>>, Compare>& Q, map<vector<vector<int>>, int>& visited);
+
+};
+
+template <class T, class S, class C>
+void clearpq(priority_queue<T, S, C>& q){
+    q=priority_queue<T, S, C>();
+}
+
+class Compare {
+    public:
+        bool operator() (const pair<LSC, int>& a, const pair<LSC, int>& b) {
+            return (a.second > b.second);
+        }
 };
 
 void LSC::MoveGen(queue<LSC>& Q, map<vector<vector<int>>, int>& visited) {
@@ -210,6 +232,32 @@ void LSC::MoveGen(stack<LSC>& Q, map<vector<vector<int>>, int>& visited) {
                     neigh.Move(cell, color_set.first, color_next);
                     if (visited[neigh.square] != 1) {
                         Q.push(neigh);
+                    }
+                }
+            }
+        }
+    }
+}
+
+void LSC::MoveGen(priority_queue<pair<LSC, int>, vector<pair<LSC, int>>, Compare>& Q, map<vector<vector<int>>, int>& visited) {
+    vector<int> colors;
+    for (int i=1; i<=square.size(); i++) {
+        colors.push_back(i);
+    }
+    for (auto& color_set: V) {
+        for (auto& cell: color_set.second) {
+            for (auto& color_next: colors) {
+                if (color_next != color_set.first) {
+                    LSC neigh;
+                    neigh.n = n;
+                    neigh.adj_list = adj_list;
+                    neigh.square = square;
+                    neigh.V = V;
+                    neigh.D = D;
+                    neigh.Move(cell, color_set.first, color_next);
+                    if (visited[neigh.square] != 1) {
+                        clearpq(Q);
+                        Q.push({neigh, this->CL() - neigh.CL()});
                     }
                 }
             }
@@ -279,6 +327,8 @@ void DFS(LSC S) {
     }
 }
 
+
+
 int main() {
     LSC test(
         {{2, 0, 0},
@@ -286,8 +336,15 @@ int main() {
          {0, 0, 0}
         }
     );
-
-    // BFS(test);
-    DFS(test);
+    std::chrono::time_point<std::chrono::system_clock> start, end;
+    start = std::chrono::system_clock::now();
+    BFS(test);
+    // DFS(test);
+    end = std::chrono::system_clock::now();
+    std::chrono::duration<double> elapsed_seconds = end - start;
+    std::time_t end_time = std::chrono::system_clock::to_time_t(end);
+ 
+    std::cout << "finished computation at " << std::ctime(&end_time)
+              << "elapsed time: " << elapsed_seconds.count() << "s\n";
     return 0;
 }
