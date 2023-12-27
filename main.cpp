@@ -87,7 +87,36 @@ class LSC : public Graph {
             }
         }
 
-        // Randomly assign color sets
+        // Reduction of domain set using smart solving
+        bool isReducible = true;
+        while (isReducible)
+        {
+            isReducible = false;
+            for (int i=0; i<x; i++) 
+            {
+                for (int j=0; j<x; j++) 
+                {
+                    // Only one possible color can be assigned
+                    if (D[{i, j}].size() == 1)
+                    {
+                        int color = *D[{i, j}].begin();
+                        V[color].insert({i, j});
+                        D[{i, j}].erase(color);
+                        square[i][j] = color;
+                        for (auto It : adj_list[{i, j}]) {
+                            D[It].erase(color);
+                        }
+                        V[color].insert({i, j});
+                        isReducible = true;
+                        pair <int, int> n1 = {i, j};
+                        // Removing the cell from the candidate set
+                        Cand_set.erase(remove(Cand_set.begin(), Cand_set.end(), n1), Cand_set.end());
+                    }
+                }
+            }
+        }
+
+        // Randomly assign color sets to remaining candidates
         shuffle(Cand_set.begin(), Cand_set.end(), default_random_engine(time(0)));
         srand(time(0));
         for (auto& It: Cand_set) {
@@ -153,11 +182,6 @@ class LSC : public Graph {
     void MoveGen(priority_queue<pair<LSC, int>, vector<pair<LSC, int>>, Compare>& Q, map<vector<vector<int>>, int>& visited);
 
 };
-
-template <class T, class S, class C>
-void clearpq(priority_queue<T, S, C>& q){
-    q=priority_queue<T, S, C>();
-}
 
 class Compare {
     public:
@@ -334,10 +358,9 @@ void BestFS(LSC S) {
 
 int main() {
     LSC test(
-        {{2, 0, 0, 1},
-         {0, 3, 0, 0},
-         {0, 4, 0, 2}, 
-         {1, 0, 0, 0}
+        {{3, 0, 0},
+         {0, 0, 2},
+         {0, 0, 0},
         }
     );
     std::chrono::time_point<std::chrono::system_clock> start, end;
