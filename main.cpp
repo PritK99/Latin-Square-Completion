@@ -314,8 +314,8 @@ void BestFS(LSC S) {
     while(!Open.empty()) {
         steps++;
         auto curr = Open.top();
-        // curr.first.printSquare();
-        cout << curr.second << "\n";
+        curr.first.printSquare();
+        cout << "\n";
         Open.pop();
         if (curr.first.GoalTest()) {
             solved = true;
@@ -334,9 +334,10 @@ void BestFS(LSC S) {
 
 int main() {
     LSC test(
-        {{2, 0, 0},
-         {0, 3, 0},
-         {0, 0, 0}
+        {{2, 0, 0, 1},
+         {0, 3, 0, 0},
+         {0, 4, 0, 2}, 
+         {1, 0, 0, 0}
         }
     );
     std::chrono::time_point<std::chrono::system_clock> start, end;
