@@ -8,6 +8,7 @@
 #include <stack>
 #include <chrono>
 #include <ctime>
+#include <algorithm>
 
 using namespace std;
 
@@ -66,10 +67,10 @@ class LSC : public Graph {
                     add_edge({i, j}, {i, k});
                     add_edge({j, i}, {k, i});
                 }
-                if (square[i][j] <= 0) {
+                if (square[i][j] == 0) {
                     Cand_set.push_back({i, j});
-                    for (int k=0; k<x; k++) {
-                        D[{i, j}].insert(k+1);
+                    for (int k=1; k<=x; k++) {
+                        D[{i, j}].insert(k);
                     }
                 }
             }
@@ -78,7 +79,7 @@ class LSC : public Graph {
         // Conf for already filled cells
         for (int i=0; i<x; i++) {
             for (int j=0; j<x; j++) {
-                if (square[i][j] > 0) {
+                if (square[i][j] != 0) {
                     for (auto It : adj_list[{i, j}]) {
                         D[It].erase(square[i][j]);
                     }
@@ -120,7 +121,8 @@ class LSC : public Graph {
         shuffle(Cand_set.begin(), Cand_set.end(), default_random_engine(time(0)));
         srand(time(0));
         for (auto& It: Cand_set) {
-            if (!D[It].size() == 0) {
+            // cout << It.first << "," << It.second << " ";
+            if (D[It].size() != 0) {
                 int r = rand() % D[It].size();
                 auto Iter = D[It].begin();
                 advance(Iter, r);
@@ -131,6 +133,11 @@ class LSC : public Graph {
                 // for (int i=0; i<adj_list[It].size(); i++) {
                 //     D[adj_list[It][i]].erase(color);   
                 // }
+                // cout << color << "\n";
+            }
+            else {
+                cout << "Given Partial Latin Square cannot solved\n";
+                exit(1);
             }
         }
     } 
@@ -358,9 +365,10 @@ void BestFS(LSC S) {
 
 int main() {
     LSC test(
-        {{3, 0, 0},
-         {0, 0, 2},
-         {0, 0, 0},
+        {{3, 0, 0, 0},
+         {0, 0, 0, 0},
+         {0, 0, 0, 1},
+         {4, 0, 0, 0},
         }
     );
     std::chrono::time_point<std::chrono::system_clock> start, end;
