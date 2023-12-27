@@ -87,20 +87,36 @@ class LSC : public Graph {
             }
         }
 
-        // Reduction of domain set
-        for (int i=0; i<x; i++) {
-            for (int j=0; j<x; j++) {
-                if (D[{i, j}].size() == 1)
+        // Reduction of domain set using smart solving
+        bool isReducible = true;
+        while (isReducible)
+        {
+            isReducible = false;
+            for (int i=0; i<x; i++) 
+            {
+                for (int j=0; j<x; j++) 
                 {
-                    int color = *D[{i, j}].begin();
-                    V[color].insert({i, j});
-                    D[{i, j}].erase(color);
-                    square[i][j] = color;
+                    // Only one possible color can be assigned
+                    if (D[{i, j}].size() == 1)
+                    {
+                        int color = *D[{i, j}].begin();
+                        V[color].insert({i, j});
+                        D[{i, j}].erase(color);
+                        square[i][j] = color;
+                        for (auto It : adj_list[{i, j}]) {
+                            D[It].erase(color);
+                        }
+                        V[color].insert({i, j});
+                        isReducible = true;
+                        pair <int, int> n1 = {i, j};
+                        // Removing the cell from the candidate set
+                        Cand_set.erase(remove(Cand_set.begin(), Cand_set.end(), n1), Cand_set.end());
+                    }
                 }
             }
         }
 
-        // Randomly assign color sets
+        // Randomly assign color sets to remaining candidates
         shuffle(Cand_set.begin(), Cand_set.end(), default_random_engine(time(0)));
         srand(time(0));
         for (auto& It: Cand_set) {
@@ -342,10 +358,9 @@ void BestFS(LSC S) {
 
 int main() {
     LSC test(
-        {{2, 0, 0, 0},
-         {0, 3, 0, 0},
-         {0, 0, 0, 0},
-         {3, 0, 1, 2}
+        {{3, 0, 0},
+         {0, 0, 2},
+         {0, 0, 0},
         }
     );
     std::chrono::time_point<std::chrono::system_clock> start, end;
