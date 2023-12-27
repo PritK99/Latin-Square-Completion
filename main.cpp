@@ -87,6 +87,19 @@ class LSC : public Graph {
             }
         }
 
+        // Reduction of domain set
+        for (int i=0; i<x; i++) {
+            for (int j=0; j<x; j++) {
+                if (D[{i, j}].size() == 1)
+                {
+                    int color = *D[{i, j}].begin();
+                    V[color].insert({i, j});
+                    D[{i, j}].erase(color);
+                    square[i][j] = color;
+                }
+            }
+        }
+
         // Randomly assign color sets
         shuffle(Cand_set.begin(), Cand_set.end(), default_random_engine(time(0)));
         srand(time(0));
@@ -153,11 +166,6 @@ class LSC : public Graph {
     void MoveGen(priority_queue<pair<LSC, int>, vector<pair<LSC, int>>, Compare>& Q, map<vector<vector<int>>, int>& visited);
 
 };
-
-template <class T, class S, class C>
-void clearpq(priority_queue<T, S, C>& q){
-    q=priority_queue<T, S, C>();
-}
 
 class Compare {
     public:
@@ -334,9 +342,10 @@ void BestFS(LSC S) {
 
 int main() {
     LSC test(
-        {{2, 0, 0},
-         {0, 3, 0},
-         {0, 0, 0}
+        {{2, 0, 0, 0},
+         {0, 3, 0, 0},
+         {0, 0, 0, 0},
+         {3, 0, 1, 2}
         }
     );
     std::chrono::time_point<std::chrono::system_clock> start, end;
