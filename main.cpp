@@ -338,8 +338,8 @@ void BestFS(LSC S) {
     while(!Open.empty()) {
         steps++;
         auto curr = Open.top();
-        // curr.first.printSquare();
-        cout << curr.second << "\n";
+        curr.first.printSquare();
+        cout << "\n";
         Open.pop();
         if (curr.first.GoalTest()) {
             solved = true;
