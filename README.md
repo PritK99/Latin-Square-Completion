@@ -53,3 +53,5 @@ https://github.com/PritK99/Latin-Square-Completion/assets/103848930/ffdf1d8a-355
 ### 4. Reduction & Best First Search Implementation
 
 ## References
+
+A Fast Local Search Algorithm for the Latin Square Completion Problem (AAAI 22) by Shiwei Pan, Yiyuan Wang, Minghao Yin
