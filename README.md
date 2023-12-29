@@ -4,7 +4,7 @@
 
 A Latin square of order ```n``` is a ```nxn``` matrix consisting of n symbols (i.e., {1, 2, . . . , n}) in which each symbol occurs exactly once in each row and exactly once in each column. If some grids are empty, then the Latin square complete (LSC) problem of order n aims to complete the empty grids with n symbols to obtain an arbitrary legal Latin square.
 
-<img src = "latinsq.jpg" alt= "latin square problem">
+<img src = "assets/latinsq.jpg" alt= "latin square problem">
 
 ## NP-Complete Problem
 
@@ -13,7 +13,9 @@ Latin Square Completion is a Constraint Satisfaction Problem and hence is NP Com
 It can be defined as a Constraint Satisfaction Problem (CSP) as follows: 
 
 ```Variables```: Each cell in NxN matrix
+
 ```Domains```: {1, 2, . . . , n}
+
 ```Constraints```: Each symbol (1-n) can occur exactly once in a row and column
 
 In this project, we aim to explore various state space reduction techniques and heuristics which can be used to solve this LSC problem, using graph-coloring representation, to reduce the computational complexity of the problem. 
@@ -22,19 +24,19 @@ In this project, we aim to explore various state space reduction techniques and 
 
 1) Transforming the problem as a Graph Colouring problem
 
-<img src = "graph-color.jpg" alt= "latin square problem">
+<img src = "assets/graph-color.jpg" alt= "latin square problem">
 
 Here, the nodes represt the cells, and the edges represent the constraints. The color of the node represents the value of the symbol in the cell.
 
 2) Reduction of Graph
 
-<img src = "reduction.jpg" alt= "latin square problem">
+<img src = "assets/reduction.jpg" alt= "latin square problem">
 
 We reduce the search space by filling those cells for which the domain is not greater than 1. This allows us to significantly reduce the search space.
 
 3) Best First Search
 
-<img src = "best-first.jpg" alt= "latin square problem">
+<img src = "assets/best-first.jpg" alt= "latin square problem">
 
 ## Output
 
