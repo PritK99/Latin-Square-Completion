@@ -8,6 +8,7 @@
 #include <stack>
 #include <chrono>
 #include <ctime>
+#include <algorithm>
 
 using namespace std;
 
@@ -66,10 +67,10 @@ class LSC : public Graph {
                     add_edge({i, j}, {i, k});
                     add_edge({j, i}, {k, i});
                 }
-                if (square[i][j] <= 0) {
+                if (square[i][j] == 0) {
                     Cand_set.push_back({i, j});
-                    for (int k=0; k<x; k++) {
-                        D[{i, j}].insert(k+1);
+                    for (int k=1; k<=x; k++) {
+                        D[{i, j}].insert(k);
                     }
                 }
             }
@@ -78,7 +79,7 @@ class LSC : public Graph {
         // Conf for already filled cells
         for (int i=0; i<x; i++) {
             for (int j=0; j<x; j++) {
-                if (square[i][j] > 0) {
+                if (square[i][j] != 0) {
                     for (auto It : adj_list[{i, j}]) {
                         D[It].erase(square[i][j]);
                     }
@@ -87,11 +88,41 @@ class LSC : public Graph {
             }
         }
 
-        // Randomly assign color sets
+        // Reduction of domain set using smart solving
+        bool isReducible = true;
+        while (isReducible)
+        {
+            isReducible = false;
+            for (int i=0; i<x; i++) 
+            {
+                for (int j=0; j<x; j++) 
+                {
+                    // Only one possible color can be assigned
+                    if (D[{i, j}].size() == 1)
+                    {
+                        int color = *D[{i, j}].begin();
+                        V[color].insert({i, j});
+                        D[{i, j}].erase(color);
+                        square[i][j] = color;
+                        for (auto It : adj_list[{i, j}]) {
+                            D[It].erase(color);
+                        }
+                        V[color].insert({i, j});
+                        isReducible = true;
+                        pair <int, int> n1 = {i, j};
+                        // Removing the cell from the candidate set
+                        Cand_set.erase(remove(Cand_set.begin(), Cand_set.end(), n1), Cand_set.end());
+                    }
+                }
+            }
+        }
+
+        // Randomly assign color sets to remaining candidates
         shuffle(Cand_set.begin(), Cand_set.end(), default_random_engine(time(0)));
         srand(time(0));
         for (auto& It: Cand_set) {
-            if (!D[It].size() == 0) {
+            // cout << It.first << "," << It.second << " ";
+            if (D[It].size() != 0) {
                 int r = rand() % D[It].size();
                 auto Iter = D[It].begin();
                 advance(Iter, r);
@@ -102,6 +133,11 @@ class LSC : public Graph {
                 // for (int i=0; i<adj_list[It].size(); i++) {
                 //     D[adj_list[It][i]].erase(color);   
                 // }
+                // cout << color << "\n";
+            }
+            else {
+                cout << "Given Partial Latin Square cannot solved\n";
+                exit(1);
             }
         }
     } 
@@ -153,11 +189,6 @@ class LSC : public Graph {
     void MoveGen(priority_queue<pair<LSC, int>, vector<pair<LSC, int>>, Compare>& Q, map<vector<vector<int>>, int>& visited);
 
 };
-
-template <class T, class S, class C>
-void clearpq(priority_queue<T, S, C>& q){
-    q=priority_queue<T, S, C>();
-}
 
 class Compare {
     public:
@@ -314,8 +345,8 @@ void BestFS(LSC S) {
     while(!Open.empty()) {
         steps++;
         auto curr = Open.top();
-        // curr.first.printSquare();
-        cout << curr.second << "\n";
+        curr.first.printSquare();
+        cout << "\n";
         Open.pop();
         if (curr.first.GoalTest()) {
             solved = true;
@@ -334,9 +365,10 @@ void BestFS(LSC S) {
 
 int main() {
     LSC test(
-        {{2, 0, 0},
-         {0, 3, 0},
-         {0, 0, 0}
+        {{3, 0, 0, 0},
+         {0, 0, 0, 0},
+         {0, 0, 0, 1},
+         {4, 0, 0, 0},
         }
     );
     std::chrono::time_point<std::chrono::system_clock> start, end;
