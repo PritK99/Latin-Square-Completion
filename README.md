@@ -50,7 +50,7 @@ https://github.com/PritK99/Latin-Square-Completion/assets/103848930/ffdf1d8a-355
 
 ### 3. Best First Search Implementation
 
-### 4. Reduction & Best First Search Implementation
+### 4. Reduction and Smart Solving Techniques
 
 ## References
 
