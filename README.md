@@ -50,7 +50,15 @@ https://github.com/PritK99/Latin-Square-Completion/assets/103848930/ffdf1d8a-355
 
 ### 3. Best First Search Implementation
 
+https://github.com/PritK99/Latin-Square-Completion/assets/103848930/e7c7b531-2bf7-48bd-8bfc-bc58b2d0e795
+
 ### 4. Reduction and Smart Solving Techniques
+
+https://github.com/PritK99/Latin-Square-Completion/assets/103848930/6131050e-931a-4c0d-aca0-84f5be7df869
+
+### 5. 4x4 LSC using Heuristics and Reductions
+
+https://github.com/PritK99/Latin-Square-Completion/assets/103848930/01a084e4-61a1-4614-b01a-fa5425ecb1bf
 
 ## References
 
