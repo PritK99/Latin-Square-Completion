@@ -345,19 +345,18 @@ void BestFS(LSC S) {
     while(!Open.empty()) {
         steps++;
         auto curr = Open.top();
-        curr.first.printSquare();
-        cout << "\n";
+        // curr.first.printSquare();
+        // cout << "\n";
         Open.pop();
         if (curr.first.GoalTest()) {
             solved = true;
+            curr.first.printSquare();
             break;
         }
         Close[curr.first.square]++;
 
         curr.first.MoveGen(Open, Close);
     }
-
-    cout << "Soln\n";
     if (solved) {
         cout << "Steps taken: " << steps << "\n";
     }
@@ -365,12 +364,14 @@ void BestFS(LSC S) {
 
 int main() {
     LSC test(
-        {{3, 0, 0, 0},
-         {0, 0, 0, 0},
-         {0, 0, 0, 1},
-         {4, 0, 0, 0},
+        {{3, 0, 0, 0, 0},
+         {0, 0, 0, 0, 0},
+         {0, 0, 1, 0, 0},
+         {0, 0, 0, 0, 0},
+         {0, 0, 0, 0, 0},
         }
     );
+    test.printSquare();
     std::chrono::time_point<std::chrono::system_clock> start, end;
     start = std::chrono::system_clock::now();
     // BFS(test);
@@ -378,9 +379,8 @@ int main() {
     BestFS(test);
     end = std::chrono::system_clock::now();
     std::chrono::duration<double> elapsed_seconds = end - start;
-    std::time_t end_time = std::chrono::system_clock::to_time_t(end);
+    // std::time_t end_time = std::chrono::system_clock::to_time_t(end);
  
-    std::cout << "finished computation at " << std::ctime(&end_time)
-              << "elapsed time: " << elapsed_seconds.count() << "s\n";
+    std::cout << "elapsed time: " << elapsed_seconds.count() << "s\n";
     return 0;
 }
