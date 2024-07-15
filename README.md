@@ -38,6 +38,36 @@ We reduce the search space by filling those cells for which the domain is not gr
 
 <img src = "assets/best-first.jpg" alt= "latin square problem">
 
+## Build Instructions
+
+Pre-requisites:
+- make 
+- g++ 
+
+To compile all targets / algorithms, run
+
+```sh
+make all
+```
+
+To compile only a specific target / algorithm (from BFS, DFS, BestFS or PLITS {sequential & parallel}), run (e.g. for bestfs)
+
+```sh
+make bestfs
+```
+
+To execute any program, run (e.g. for bfs)
+
+```sh
+./bfs
+```
+
+To remove the executables, run 
+
+```sh
+make clean
+```
+
 ## Output
 
 ### 1. BFS implementation

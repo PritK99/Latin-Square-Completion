@@ -117,7 +117,7 @@ class LSC : public Graph {
             }
         }
 
-        // Randomly assign color sets to remaining candidates
+        // // Randomly assign color sets to remaining candidates
         shuffle(Cand_set.begin(), Cand_set.end(), default_random_engine(time(0)));
         srand(time(0));
         for (auto& It: Cand_set) {
@@ -270,117 +270,4 @@ void LSC::MoveGen(priority_queue<pair<LSC, int>, vector<pair<LSC, int>>, Compare
             }
         }
     }
-}
-
-void BFS(LSC S) {
-    int steps = 0;
-    queue<LSC> Open;
-    Open.push(S);
-    bool solved = false;
-
-    map<vector<vector<int>>, int> Close;
-    LSC curr;
-
-    while(!Open.empty()) {
-        steps++;
-        curr = Open.front();
-        curr.printSquare();
-        cout << "\n";
-        Open.pop();
-        if (curr.GoalTest()) {
-            solved = true;
-            break;
-        }
-        Close[curr.square]++;
-
-        curr.MoveGen(Open, Close);
-    }
-
-    cout << "Soln\n";
-    if (solved) {
-        cout << "Steps taken: " << steps << "\n";
-        curr.printSquare();
-    }
-}
-
-void DFS(LSC S) {
-    int steps = 0;
-    stack<LSC> Open;
-    Open.push(S);
-    bool solved = false;
-
-    map<vector<vector<int>>, int> Close;
-    LSC curr;
-
-    while(!Open.empty()) {
-        steps++;
-        curr = Open.top();
-        curr.printSquare();
-        cout << "\n";
-        Open.pop();
-        if (curr.GoalTest()) {
-            solved = true;
-            break;
-        }
-        Close[curr.square]++;
-
-        curr.MoveGen(Open, Close);
-    }
-
-    cout << "Soln\n";
-    if (solved) {
-        cout << "Steps taken: " << steps << "\n";
-        curr.printSquare();
-    }
-}
-
-void BestFS(LSC S) {
-    int steps = 0;
-    priority_queue<pair<LSC, int>, vector<pair<LSC, int>>, Compare> Open;
-    Open.push({S, S.CL()});
-    bool solved = false;
-
-    map<vector<vector<int>>, int> Close;
-
-    while(!Open.empty()) {
-        steps++;
-        auto curr = Open.top();
-        // curr.first.printSquare();
-        // cout << "\n";
-        Open.pop();
-        if (curr.first.GoalTest()) {
-            solved = true;
-            curr.first.printSquare();
-            break;
-        }
-        Close[curr.first.square]++;
-
-        curr.first.MoveGen(Open, Close);
-    }
-    if (solved) {
-        cout << "Steps taken: " << steps << "\n";
-    }
-}
-
-int main() {
-    LSC test(
-        {{3, 0, 0, 0, 0},
-         {0, 0, 0, 0, 0},
-         {0, 0, 1, 0, 0},
-         {0, 0, 0, 0, 0},
-         {0, 0, 0, 0, 0},
-        }
-    );
-    test.printSquare();
-    std::chrono::time_point<std::chrono::system_clock> start, end;
-    start = std::chrono::system_clock::now();
-    // BFS(test);
-    // DFS(test);
-    BestFS(test);
-    end = std::chrono::system_clock::now();
-    std::chrono::duration<double> elapsed_seconds = end - start;
-    // std::time_t end_time = std::chrono::system_clock::to_time_t(end);
- 
-    std::cout << "elapsed time: " << elapsed_seconds.count() << "s\n";
-    return 0;
 }

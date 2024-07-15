@@ -99,7 +99,7 @@ class LSC : public Graph {
 
     vector<LSC> gen_population(int pop_size) {
         vector<LSC> res;
-        // #pragma omp parallel for
+        #pragma omp parallel for shared(res)
         for (int i=0; i<pop_size; i++) {
             LSC temp;
             temp.square = square;
@@ -110,6 +110,7 @@ class LSC : public Graph {
             temp.Cand_set = Cand_set;
             temp.adj_list = adj_list;
             temp.init();
+            #pragma omp critical
             res.push_back(temp);
         }
         return res;
@@ -196,6 +197,7 @@ class LSC : public Graph {
     int CL() {
         int res = 0; 
         for (auto& color_set: V) {
+            if (color_set.first == 0) continue;
             auto It = color_set.second.begin();
             while (It != color_set.second.end()) {
                 auto next_It = It;
@@ -330,10 +332,10 @@ LSC PLITS(LSC S) {
     map<vector<vector<int>>, int> tabu_list;
     // map<vector<vector<int>>, int> Close;
     LSC final = S;
-    float phi = 0.5;
+    float phi = 0.6;
     Open.push({S, S.F(phi)});
     // cout << final.CL() << "," << final.F(phi) << "\n";
-    for (int i=0; i<100 * S.V.size() && !Open.empty(); i++) {
+    for (int i=0; i<(100 * S.V.size()) && !Open.empty(); i++) {
         auto curr = Open.top();
         // curr.first.printSquare(); 
         // cout << curr.first.F(phi) << "\n";
@@ -352,7 +354,7 @@ LSC PLITS(LSC S) {
     Open = priority_queue<pair<LSC, int>, vector<pair<LSC, int>>, Compare>();
     tabu_list.clear();
     Open.push({S, S.F(phi)});
-    for (int i=0; i<2 * S.V.size() && !Open.empty(); i++) {
+    for (int i=0; i<(10 * S.V.size()) && !Open.empty(); i++) {
         auto curr = Open.top();
         // curr.first.printSquare(); 
         // cout << curr.first.F(phi) << "\n";
@@ -403,19 +405,19 @@ int main() {
         }
     );
 
-    // LSC test2 = test;
+    // LSC test(
+    //     {{3, 0, 0, 0},
+    //      {0, 1, 0, 2},
+    //      {0, 0, 1, 0},
+    //      {0, 0, 0, 0},
+    //     }
+    // );
     // test.init();
-    // // test2.init();
-    // test.printSquare();
-    // cout << "\n";
-    // test2.printSquare();
-    // cout << "\n";
-    // test.print_color_set();
-    // cout << "\n";
-    // test2.print_color_set();
-    // cout << "\n";
-    // cout << "Distance: " << dist(test, test2) << "\n";
+    // auto res = PLITS(test);
 
+    // res.printSquare();
+    // cout << res.CL() << "," << res.f() << endl;
+    // cout << res.V << endl;
     std::chrono::time_point<std::chrono::system_clock> start, end;
     start = std::chrono::system_clock::now();
     // LSC temp = PLITS(test);
@@ -482,6 +484,8 @@ int main() {
             P_all.erase(P_all.begin());
         }   
     }
+
+    cout << "Solutions: \n";
 
     for (auto& i: new_pop) {
         i.first.printSquare();

@@ -31,5 +31,8 @@
 *.exe
 *.out
 *.app
-main
-mpma
+bfs
+dfs
+bestfs
+plits_seq
+plits_par
