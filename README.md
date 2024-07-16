@@ -38,6 +38,21 @@ We reduce the search space by filling those cells for which the domain is not gr
 
 <img src = "assets/best-first.jpg" alt= "latin square problem">
 
+## File Structure
+```
+👨‍💻Latin-Square-Completion
+ ┣ 📂assets                            // Contains all the reference gifs, images
+ ┣ 📂include                           // Header file for LSC
+ ┃ ┣ 📄lsc.hpp      
+ ┣ 📂src                          
+ ┃ ┣ 📄bfs.cpp                         // Breadth-First Search
+ ┃ ┣ 📄dfs.cpp                         // Depth-First Search 
+ ┃ ┣ 📄bestfs.cpp                      // Best-First Search
+ ┃ ┣ 📄plits.cpp                       // Partial Legal and Illegal Tabu Search 
+ ┣ 📄Makefile       
+ ┣ 📄README.md   
+``` 
+
 ## Getting Started
 
 ### Prerequisites

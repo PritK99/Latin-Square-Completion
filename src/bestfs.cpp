@@ -2,6 +2,11 @@
 
 using namespace std;
 
+/**
+ * @brief Performs a Best-First Search (BestFS) on the given Latin square coloring problem.
+ * 
+ * @param S The initial LSC instance to start the search from.
+ */
 void BestFS(LSC S) {
     int steps = 0;
     priority_queue<pair<LSC, int>, vector<pair<LSC, int>>, Compare> Open;
