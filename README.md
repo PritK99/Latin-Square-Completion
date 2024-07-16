@@ -42,13 +42,15 @@ We reduce the search space by filling those cells for which the domain is not gr
 ```
 👨‍💻Latin-Square-Completion
  ┣ 📂assets                            // Contains all the reference gifs, images
- ┣ 📂include                           // Header file for LSC
- ┃ ┣ 📄lsc.hpp      
+ ┣ 📂include                           
+ ┃ ┣ 📄lsc.hpp                         // Header file for LSC
+ ┃ ┣ 📄plits.hpp                       // Header file for PLITS 
  ┣ 📂src                          
  ┃ ┣ 📄bfs.cpp                         // Breadth-First Search
  ┃ ┣ 📄dfs.cpp                         // Depth-First Search 
  ┃ ┣ 📄bestfs.cpp                      // Best-First Search
- ┃ ┣ 📄plits.cpp                       // Partial Legal and Illegal Tabu Search 
+ ┃ ┣ 📄plits_seq.cpp                   // Partial Legal and Illegal Tabu Search (PLITS), Sequential
+ ┃ ┣ 📄plits_par.cpp                   // PLITS, Parallelised using OpenMP
  ┣ 📄Makefile       
  ┣ 📄README.md   
 ``` 
@@ -85,29 +87,40 @@ To compile all targets / algorithms, run
 make all
 ```
 
+To list all targets, run
+
+```sh
+$ make list
+Targets (Algorithms): 
+- bfs (Breadth First Search)
+- dfs (Depth First Search)
+- bestfs (Best First Search)
+- plits_seq (Partial Legal & Illegal Tabu Search)
+- plits_par (Parallelised Partial Legal & Illegal Tabu Search)
+```
 
 To compile only a specific target / algorithm (from BFS, DFS, BestFS or PLITS {sequential & parallel}), run (e.g. for bestfs)
 
 ```sh
-make bestfs
+$ make bestfs
 ```
 
 To execute any program, run (e.g. for bfs)
 
 ```sh
-./bfs
+$ ./bfs
 ```
 
 <b>Note</b>: When running the parallel PLITS algorithm, you can specify the number of threads as an argument. For example:
 
 ```sh
-./plits_par 4
+$ ./plits_par 4
 ```
 
-To remove the executables, run 
+To remove any executables, run 
 
 ```sh
-make clean
+$ make clean
 ```
 
 ## Output
