@@ -38,17 +38,38 @@ We reduce the search space by filling those cells for which the domain is not gr
 
 <img src = "assets/best-first.jpg" alt= "latin square problem">
 
-## Build Instructions
+## Getting Started
 
-Pre-requisites:
-- make 
-- g++ 
+### Prerequisites
+To download and use this code, the minimum requirements are:
+
+* make: A build automation tool.
+* g++: The GNU C++ compiler.
+* Operating System: Windows 7 or later (64-bit) or Ubuntu 20.04 or later.
+
+### Installation
+
+Clone the project by typing the following command in your Terminal/CommandPrompt
+
+```
+git clone https://github.com/PritK99/Latin-Square-Completion
+```
+Navigate to the Latin-Square-Completion folder
+
+```
+cd Latin-Square-Completion
+```
+
+### Usage
+
+Once you have installed the prerequisites and cloned the project, you can start using it. Follow these commands:
 
 To compile all targets / algorithms, run
 
 ```sh
 make all
 ```
+
 
 To compile only a specific target / algorithm (from BFS, DFS, BestFS or PLITS {sequential & parallel}), run (e.g. for bestfs)
 
@@ -60,6 +81,12 @@ To execute any program, run (e.g. for bfs)
 
 ```sh
 ./bfs
+```
+
+<b>Note</b>: When running the parallel PLITS algorithm, you can specify the number of threads as an argument. For example:
+
+```sh
+./plits_par 4
 ```
 
 To remove the executables, run 

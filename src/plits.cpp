@@ -10,6 +10,7 @@
 #include <ctime>
 #include <algorithm>
 #include <list>
+#include <omp.h>
 
 using namespace std;
 
@@ -395,7 +396,14 @@ vector<vector<int>> dist_matrix_calc(vector<LSC>& init_pop, vector<LSC>& improve
     return res;
 }
 
-int main() {
+int main(int argc, char* argv[]) {
+    int num_threads = 16; // Default number of threads
+    if (argc > 1) 
+    {
+        num_threads = stoi(argv[1]);
+    }
+    omp_set_num_threads(num_threads);
+
     LSC test(
         {{3, 0, 0, 0, 0},
          {0, 0, 0, 2, 0},
