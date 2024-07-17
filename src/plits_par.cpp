@@ -124,13 +124,10 @@ int main(int argc, char *argv[])
 
     cout << "Number of threads: " << omp_get_max_threads() << endl;
 
-    LSC test(
-        {
-            {3, 0, 0, 0, 0},
-            {0, 0, 0, 2, 0},
-            {0, 0, 1, 0, 0},
-            {0, 0, 0, 0, 0},
-            {0, 4, 0, 1, 5},
+    LSC test({{0, 0, 1, 0},
+         {0, 2, 0, 0},
+         {3, 0, 0, 0},
+         {0, 0, 0, 1},
         });
 
     std::chrono::time_point<std::chrono::system_clock> start, end;
@@ -201,7 +198,7 @@ int main(int argc, char *argv[])
 
     end = std::chrono::system_clock::now();
     std::chrono::duration<double> elapsed_seconds = end - start;
-
+    cout << "Steps taken (average): " << global_steps << "\n";
     std::cout << "elapsed time: " << elapsed_seconds.count() << "s\n";
     return 0;
 }

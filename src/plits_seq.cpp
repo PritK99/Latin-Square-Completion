@@ -8,7 +8,7 @@ using namespace std;
  * @param S The initial LSC structure to optimize.
  * @return LSC The best solution found after optimization.
  */
-LSC PLITS(LSC S)
+LSC PLITS(LSC S, int& steps)
 {
     priority_queue<pair<LSC, int>, vector<pair<LSC, int>>, Compare> Open;
     srand(time(0));
@@ -22,6 +22,7 @@ LSC PLITS(LSC S)
     // First phase of the PLITS algorithm
     for (int i = 0; i < (100 * S.V.size()) && !Open.empty(); i++)
     {
+        steps++;
         auto curr = Open.top();
         Open.pop();
         curr.first.MoveGen(phi, T, Open, tabu_list);
@@ -45,8 +46,9 @@ LSC PLITS(LSC S)
     Open.push({S, S.F(phi)});
 
     // Second phase of the PLITS algorithm
-    for (int i = 0; i < (10 * S.V.size()) && !Open.empty(); i++)
+    for (int i = 0; i < (200 * S.V.size()) && !Open.empty(); i++)
     {
+        steps++;
         auto curr = Open.top();
         Open.pop();
         curr.first.MoveGen(phi, T, Open, tabu_list);
@@ -115,28 +117,29 @@ vector<vector<int>> dist_matrix_calc(vector<LSC> &init_pop, vector<LSC> &improve
 int main()
 {
     LSC test(
-        {
-            {3, 0, 0, 0, 0},
-            {0, 0, 0, 2, 0},
-            {0, 0, 1, 0, 0},
-            {0, 0, 0, 0, 0},
-            {0, 4, 0, 1, 5},
+        {{0, 0, 1, 0},
+         {0, 2, 0, 0},
+         {3, 0, 0, 0},
+         {0, 0, 0, 1},
         });
 
     std::chrono::time_point<std::chrono::system_clock> start, end;
     start = std::chrono::system_clock::now();
 
     vector<LSC> res = test.gen_population(5);
-    for (LSC &i : res)       // Printing the intermediate states
-    {
-        i.printSquare();
-        cout << "\n";
-    }
+    // for (LSC &i : res)       // Printing the intermediate states
+    // {
+    //     i.printSquare();
+    //     cout << "\n";
+    // }
     vector<LSC> imp;
-
+    int steps = 0, global_steps = 0;
     for (LSC &i : res)
     {
-        LSC temp = PLITS(i);
+        LSC temp = PLITS(i, steps);
+        cout << "Steps:" << steps << "\n";
+        global_steps += steps;
+        steps = 0;
         imp.push_back(temp);
     }
     vector<vector<int>> dist_mat = dist_matrix_calc(res, imp), dist_mat_int = dist_matrix_calc(res, res);
@@ -182,7 +185,7 @@ int main()
         }
     }
 
-    cout << "Solutions: \n";
+    // cout << "Solutions: \n";
 
     for (auto &i : new_pop)
     {
@@ -192,7 +195,7 @@ int main()
 
     end = std::chrono::system_clock::now();
     std::chrono::duration<double> elapsed_seconds = end - start;
-
-    std::cout << "elapsed time: " << elapsed_seconds.count() << "s\n";
+    cout << "Steps taken (average): " << global_steps << "\n";
+    cout << "elapsed time: " << elapsed_seconds.count() << "s\n";
     return 0;
 }

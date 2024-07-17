@@ -53,7 +53,7 @@ int main()
         // }
         {{3, 0, 0},
          {0, 0, 0},
-         {1, 0, 0}});
+         {0, 0, 1}});
     test.printSquare();
     std::chrono::time_point<std::chrono::system_clock> start, end;
     start = std::chrono::system_clock::now();
