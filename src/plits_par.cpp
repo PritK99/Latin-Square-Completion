@@ -9,7 +9,7 @@ using namespace std;
  * @param S The initial LSC structure to optimize.
  * @return LSC The best solution found after optimization.
  */
-LSC PLITS(LSC S)
+LSC PLITS(LSC S, int& steps)
 {
     priority_queue<pair<LSC, int>, vector<pair<LSC, int>>, Compare> Open;
     srand(time(0));
@@ -23,6 +23,7 @@ LSC PLITS(LSC S)
     // First phase of the PLITS algorithm
     for (int i = 0; i < (100 * S.V.size()) && !Open.empty(); i++)
     {
+        steps++;
         auto curr = Open.top();
         Open.pop();
         curr.first.MoveGen(phi, T, Open, tabu_list);
@@ -46,8 +47,9 @@ LSC PLITS(LSC S)
     Open.push({S, S.F(phi)});
 
     // Second phase of the PLITS algorithm
-    for (int i = 0; i < (10 * S.V.size()) && !Open.empty(); i++)
+    for (int i = 0; i < (200 * S.V.size()) && !Open.empty(); i++)
     {
+        steps++;
         auto curr = Open.top();
         Open.pop();
         curr.first.MoveGen(phi, T, Open, tabu_list);
@@ -127,7 +129,7 @@ int main(int argc, char *argv[])
     LSC test({{0, 0, 1, 0},
          {0, 2, 0, 0},
          {3, 0, 0, 0},
-         {0, 0, 0, 1},
+         {0, 0, 0, 0},
         });
 
     std::chrono::time_point<std::chrono::system_clock> start, end;
@@ -140,6 +142,7 @@ int main(int argc, char *argv[])
         cout << "\n";
     }
     vector<LSC> imp;
+    int steps = 0, global_steps = 0;
     #pragma omp parallel for
     for (LSC &i : res)
     {
