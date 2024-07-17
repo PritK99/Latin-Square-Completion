@@ -36,6 +36,7 @@ LSC PLITS(LSC S)
         if (final.F(phi) > curr.first.F(phi))
         {
             final = curr.first;
+            if (final.GoalTest()) return final;
         }
     }
 
@@ -59,6 +60,7 @@ LSC PLITS(LSC S)
         if (final.F(phi) > curr.first.F(phi))
         {
             final = curr.first;
+            if (final.GoalTest()) return final;
         }
     }
 
@@ -135,13 +137,13 @@ int main(int argc, char *argv[])
     start = std::chrono::system_clock::now();
 
     vector<LSC> res = test.gen_population(5);
-    for (LSC &i : res)       // Printing the intermediate states
-    {
-        i.printSquare();
-        cout << "\n";
-    }
+    // for (LSC &i : res)       // Printing the intermediate states
+    // {
+    //     i.printSquare();
+    //     cout << "\n";
+    // }
     vector<LSC> imp;
-#pragma omp parallel for
+    #pragma omp parallel for
     for (LSC &i : res)
     {
         LSC temp = PLITS(i);
@@ -189,13 +191,13 @@ int main(int argc, char *argv[])
         }
     }
 
-    cout << "Solutions: \n";
+    // cout << "Solutions: \n";
 
-    for (auto &i : new_pop)
-    {
-        i.first.printSquare();
-        cout << "\n";
-    }
+    // for (auto &i : new_pop)
+    // {
+    //     i.first.printSquare();
+    //     cout << "\n";
+    // }
 
     end = std::chrono::system_clock::now();
     std::chrono::duration<double> elapsed_seconds = end - start;

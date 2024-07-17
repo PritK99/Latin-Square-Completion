@@ -35,6 +35,7 @@ LSC PLITS(LSC S)
         if (final.F(phi) > curr.first.F(phi))
         {
             final = curr.first;
+            if (final.GoalTest()) return final;
         }
     }
 
@@ -58,6 +59,7 @@ LSC PLITS(LSC S)
         if (final.F(phi) > curr.first.F(phi))
         {
             final = curr.first;
+            if (final.GoalTest()) return final;
         }
     }
 
