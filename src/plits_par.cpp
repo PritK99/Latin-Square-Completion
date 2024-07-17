@@ -142,11 +142,14 @@ int main(int argc, char *argv[])
         cout << "\n";
     }
     vector<LSC> imp;
-    int steps = 0, global_steps = 0;
+    int global_steps = 0;
     #pragma omp parallel for
     for (LSC &i : res)
     {
-        LSC temp = PLITS(i);
+        int steps = 0; 
+        LSC temp = PLITS(i, steps);
+        #pragma omp critical
+        global_steps += steps;
         imp.push_back(temp);
     }
     vector<vector<int>> dist_mat = dist_matrix_calc(res, imp), dist_mat_int = dist_matrix_calc(res, res);
