@@ -137,11 +137,11 @@ int main(int argc, char *argv[])
     start = std::chrono::system_clock::now();
 
     vector<LSC> res = test.gen_population(5);
-    // for (LSC &i : res)       // Printing the intermediate states
-    // {
-    //     i.printSquare();
-    //     cout << "\n";
-    // }
+    for (LSC &i : res)       // Printing the intermediate states
+    {
+        i.printSquare();
+        cout << "\n";
+    }
     vector<LSC> imp;
     #pragma omp parallel for
     for (LSC &i : res)
@@ -191,13 +191,13 @@ int main(int argc, char *argv[])
         }
     }
 
-    // cout << "Solutions: \n";
+    cout << "Solutions: \n";
 
-    // for (auto &i : new_pop)
-    // {
-    //     i.first.printSquare();
-    //     cout << "\n";
-    // }
+    for (auto &i : new_pop)
+    {
+        i.first.printSquare();
+        cout << "\n";
+    }
 
     end = std::chrono::system_clock::now();
     std::chrono::duration<double> elapsed_seconds = end - start;
