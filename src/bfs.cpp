@@ -21,8 +21,8 @@ void BFS(LSC S)
     {
         steps++;
         curr = Open.front();
-        curr.printSquare();
-        cout << "\n";
+        // curr.printSquare();
+        // cout << "\n";
         Open.pop();
         if (curr.GoalTest())
         {
@@ -38,7 +38,7 @@ void BFS(LSC S)
     if (solved)
     {
         cout << "Steps taken: " << steps << "\n";
-        curr.printSquare();
+        // curr.printSquare();
     }
 }
 
@@ -51,10 +51,12 @@ int main()
         //  {0, 0, 0, 0, 0},
         //  {0, 0, 0, 1, 0},
         // }
-        {{3, 0, 0},
-         {0, 0, 0},
-         {0, 0, 1}});
-    test.printSquare();
+        {{1, 0, 0, 0},
+         {0, 0, 0, 0},
+         {2, 0, 3, 0},
+         {0, 0, 0, 4},
+        });
+    // test.printSquare();
     std::chrono::time_point<std::chrono::system_clock> start, end;
     start = std::chrono::system_clock::now();
     BFS(test);

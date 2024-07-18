@@ -47,9 +47,10 @@ int main() {
         //  {0, 0, 0},
         //  {1, 0, 0}}
         {{1, 0, 0, 0},
-        {0, 2, 0, 0},
-        {0, 0, 3, 0},
-        {3, 0, 0, 1}}
+         {0, 0, 0, 0},
+         {0, 2, 0, 0},
+         {0, 0, 0, 0},
+        }
     );
     test.printSquare();
     std::chrono::time_point<std::chrono::system_clock> start, end;
@@ -57,7 +58,6 @@ int main() {
     BestFS(test);
     end = std::chrono::system_clock::now();
     std::chrono::duration<double> elapsed_seconds = end - start;
- 
     std::cout << "elapsed time: " << elapsed_seconds.count() << "s\n";
     return 0;
 }

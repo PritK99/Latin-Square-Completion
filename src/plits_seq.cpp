@@ -40,7 +40,7 @@ LSC PLITS(LSC S, int& steps)
         }
     }
 
-    phi = S.V.size();
+    phi = 2 * S.V.size();
     Open = priority_queue<pair<LSC, int>, vector<pair<LSC, int>>, Compare>();
     tabu_list.clear();
     Open.push({S, S.F(phi)});
@@ -117,11 +117,13 @@ vector<vector<int>> dist_matrix_calc(vector<LSC> &init_pop, vector<LSC> &improve
 int main()
 {
     LSC test(
-        {{0, 0, 1, 0},
-         {0, 2, 0, 0},
-         {3, 0, 0, 0},
-         {0, 0, 0, 1},
-        });
+        {{3, 0, 0, 0, 0},
+         {0, 0, 0, 2, 0},
+         {0, 0, 1, 0, 0},
+         {0, 0, 0, 0, 0},
+         {0, 0, 0, 1, 0},
+        }
+        );
 
     std::chrono::time_point<std::chrono::system_clock> start, end;
     start = std::chrono::system_clock::now();

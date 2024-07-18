@@ -34,11 +34,11 @@ void DFS(LSC S)
         curr.MoveGen(Open, Close);
     }
 
-    cout << "Soln\n";
+    // cout << "Soln\n";
     if (solved)
     {
         cout << "Steps taken: " << steps << "\n";
-        curr.printSquare();
+        // curr.printSquare();
     }
 }
 
@@ -51,9 +51,15 @@ int main()
         //  {0, 0, 0, 0, 0},
         //  {0, 0, 0, 1, 0},
         // }
-        {{3, 0, 0},
-         {0, 0, 0},
-         {1, 0, 0}});
+        // {{3, 0, 0},
+        //  {0, 0, 0},
+        //  {1, 0, 0}}
+        {{1, 0, 0, 0},
+         {0, 2, 0, 0},
+         {0, 0, 0, 0},
+         {0, 0, 0, 4},
+        }
+         );
     test.printSquare();
     std::chrono::time_point<std::chrono::system_clock> start, end;
     start = std::chrono::system_clock::now();
