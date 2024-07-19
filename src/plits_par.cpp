@@ -41,7 +41,7 @@ LSC PLITS(LSC S, int& steps)
         }
     }
 
-    phi = S.V.size();
+    phi = 2 * S.V.size();
     Open = priority_queue<pair<LSC, int>, vector<pair<LSC, int>>, Compare>();
     tabu_list.clear();
     Open.push({S, S.F(phi)});
@@ -126,21 +126,22 @@ int main(int argc, char *argv[])
 
     cout << "Number of threads: " << omp_get_max_threads() << endl;
 
-    LSC test({{0, 0, 1, 0},
-         {0, 2, 0, 0},
-         {3, 0, 0, 0},
-         {0, 0, 0, 0},
+    LSC test({{3, 0, 0, 0, 0},
+         {0, 0, 0, 2, 0},
+         {0, 0, 1, 0, 0},
+         {0, 0, 0, 0, 0},
+         {0, 0, 0, 1, 0},
         });
 
     std::chrono::time_point<std::chrono::system_clock> start, end;
     start = std::chrono::system_clock::now();
 
     vector<LSC> res = test.gen_population(5);
-    for (LSC &i : res)       // Printing the intermediate states
-    {
-        i.printSquare();
-        cout << "\n";
-    }
+    // for (LSC &i : res)       // Printing the intermediate states
+    // {
+    //     i.printSquare();
+    //     cout << "\n";
+    // }
     vector<LSC> imp;
     int global_steps = 0;
     #pragma omp parallel for
@@ -194,13 +195,13 @@ int main(int argc, char *argv[])
         }
     }
 
-    cout << "Solutions: \n";
+    // cout << "Solutions: \n";
 
-    for (auto &i : new_pop)
-    {
-        i.first.printSquare();
-        cout << "\n";
-    }
+    // for (auto &i : new_pop)
+    // {
+    //     i.first.printSquare();
+    //     cout << "\n";
+    // }
 
     end = std::chrono::system_clock::now();
     std::chrono::duration<double> elapsed_seconds = end - start;
