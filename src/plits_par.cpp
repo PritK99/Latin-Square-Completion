@@ -16,12 +16,12 @@ LSC PLITS(LSC S, int& steps)
     int T = (rand() % 9) + 0.6 * (S.V[0].size() + S.CL());
     map<vector<vector<int>>, int> tabu_list;
     LSC final = S;
-    float phi = 0.6;
+    float phi = 1;
 
     Open.push({S, S.F(phi)});
 
     // First phase of the PLITS algorithm
-    for (int i = 0; i < (100 * S.V.size()) && !Open.empty(); i++)
+    for (int i = 0; i < (50 * S.V.size()) && !Open.empty(); i++)
     {
         steps++;
         auto curr = Open.top();
@@ -41,13 +41,13 @@ LSC PLITS(LSC S, int& steps)
         }
     }
 
-    phi = 2 * S.V.size();
+    phi = 10 * S.V.size();
     Open = priority_queue<pair<LSC, int>, vector<pair<LSC, int>>, Compare>();
     tabu_list.clear();
     Open.push({S, S.F(phi)});
 
     // Second phase of the PLITS algorithm
-    for (int i = 0; i < (200 * S.V.size()) && !Open.empty(); i++)
+    for (int i = 0; i < (300 * S.V.size()) && !Open.empty(); i++)
     {
         steps++;
         auto curr = Open.top();
@@ -195,13 +195,13 @@ int main(int argc, char *argv[])
         }
     }
 
-    // cout << "Solutions: \n";
+    cout << "Solutions: \n";
 
-    // for (auto &i : new_pop)
-    // {
-    //     i.first.printSquare();
-    //     cout << "\n";
-    // }
+    for (auto &i : new_pop)
+    {
+        i.first.printSquare();
+        cout << "\n";
+    }
 
     end = std::chrono::system_clock::now();
     std::chrono::duration<double> elapsed_seconds = end - start;
