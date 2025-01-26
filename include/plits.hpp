@@ -2,7 +2,7 @@
 #include <map>
 #include <vector>
 #include <set>
-#include <random>   
+#include <random>
 #include <algorithm>
 #include <queue>
 #include <stack>
@@ -17,7 +17,7 @@ class Compare;
 
 /**
  * @brief Searches for an element in a vector.
- * 
+ *
  * @tparam T Type of elements in the vector.
  * @param v The vector to search in.
  * @param e The element to find.
@@ -41,7 +41,7 @@ public:
 
     /**
      * @brief Adds an edge between two vertices.
-     * 
+     *
      * @param n1 The first vertex.
      * @param n2 The second vertex.
      */
@@ -52,7 +52,7 @@ public:
 
     /**
      * @brief Removes a vertex and its associated edges from the graph.
-     * 
+     *
      * @param i The vertex to remove.
      */
     void remove_vertex(pair<int, int> i) {
@@ -99,7 +99,7 @@ public:
 
     /**
      * @brief Retrieves the color of a specified vertex.
-     * 
+     *
      * @param vertex The vertex to retrieve the color for.
      * @return The color of the vertex, or 0 if not found.
      */
@@ -132,7 +132,7 @@ public:
 
     /**
      * @brief Generates a population of LSC instances based on the current state.
-     * 
+     *
      * @param pop_size The size of the population to generate.
      * @return A vector containing the generated LSC instances.
      */
@@ -157,7 +157,7 @@ public:
 
     /**
      * @brief Overloads the assignment operator for LSC.
-     * 
+     *
      * @param L The LSC instance to copy from.
      */
     void operator=(const LSC& L) {
@@ -172,7 +172,7 @@ public:
 
     /**
      * @brief Constructs an LSC from a partial Latin square.
-     * 
+     *
      * @param partial The initial partial Latin square.
      */
     LSC(vector<vector<int>> partial) {
@@ -237,7 +237,7 @@ public:
 
     /**
      * @brief Moves a vertex from one color to another.
-     * 
+     *
      * @param v The vertex to move.
      * @param color1 The color to move from.
      * @param color2 The color to move to.
@@ -250,11 +250,11 @@ public:
 
     /**
      * @brief Calculates the number of conflicts in the current coloring.
-     * 
+     *
      * @return The total number of conflicts.
      */
     int CL() {
-        int res = 0; 
+        int res = 0;
         for (auto& color_set: V) {
             if (color_set.first == 0) continue; // Skip empty color
             auto It = color_set.second.begin();
@@ -275,7 +275,7 @@ public:
 
     /**
      * @brief Calculates the number of unfilled cells (color 0).
-     * 
+     *
      * @return The count of unfilled cells.
      */
     int f() {
@@ -284,7 +284,7 @@ public:
 
     /**
      * @brief Calculates the fitness function value.
-     * 
+     *
      * @param phi A weight parameter for conflict penalty.
      * @return The calculated fitness value.
      */
@@ -334,7 +334,7 @@ public:
 
     /**
      * @brief Checks if the current state is a goal state (no conflicts).
-     * 
+     *
      * @return true if the goal state is reached, false otherwise.
      */
     bool GoalTest() {
@@ -357,7 +357,7 @@ public:
 
 /**
  * @brief Generates neighbor states by moving colors and adding them to the priority queue.
- * 
+ *
  * @param Q The priority queue for storing neighbors.
  * @param visited The map of visited states to avoid duplicates.
  */
@@ -389,7 +389,7 @@ void LSC::MoveGen(priority_queue<pair<LSC, int>, vector<pair<LSC, int>>, Compare
 
 /**
  * @brief Generates neighbor states considering tabu search to avoid revisiting states.
- * 
+ *
  * @param phi Penalty weight.
  * @param tt Tabu tenure.
  * @param Q The priority queue for storing neighbors.

@@ -21,8 +21,8 @@ void DFS(LSC S)
     {
         steps++;
         curr = Open.top();
-        curr.printSquare();
-        cout << "\n";
+        // curr.printSquare();
+        // cout << "\n";
         Open.pop();
         if (curr.GoalTest())
         {
@@ -38,7 +38,7 @@ void DFS(LSC S)
     if (solved)
     {
         cout << "Steps taken: " << steps << "\n";
-        // curr.printSquare();
+        curr.printSquare();
     }
 }
 
@@ -55,9 +55,9 @@ int main()
         //  {0, 0, 0},
         //  {1, 0, 0}}
         {{1, 0, 0, 0},
-         {0, 2, 0, 0},
-         {0, 0, 0, 0},
          {0, 0, 0, 4},
+         {0, 2, 0, 0},
+         {3, 0, 0, 0},
         }
          );
     test.printSquare();
@@ -65,6 +65,7 @@ int main()
     start = std::chrono::system_clock::now();
     DFS(test);
     end = std::chrono::system_clock::now();
+    // test.printSquare()
     std::chrono::duration<double> elapsed_seconds = end - start;
 
     std::cout << "elapsed time: " << elapsed_seconds.count() << "s\n";

@@ -38,7 +38,8 @@ void BFS(LSC S)
     if (solved)
     {
         cout << "Steps taken: " << steps << "\n";
-        // curr.printSquare();
+        curr.printSquare();
+        return;
     }
 }
 
@@ -52,15 +53,20 @@ int main()
         //  {0, 0, 0, 1, 0},
         // }
         {{1, 0, 0, 0},
-         {0, 2, 0, 0},
-         {0, 0, 0, 0},
          {0, 0, 0, 4},
-        });
+         {0, 2, 0, 0},
+         {3, 0, 0, 0},
+        }
+        // {{3, 0, 0},
+        //  {0, 0, 0},
+        //  {1, 0, 0}}
+    );
     // test.printSquare();
     std::chrono::time_point<std::chrono::system_clock> start, end;
     start = std::chrono::system_clock::now();
     BFS(test);
     end = std::chrono::system_clock::now();
+
     std::chrono::duration<double> elapsed_seconds = end - start;
     std::cout << "Elapsed time: " << elapsed_seconds.count() << "s\n";
     return 0;

@@ -123,6 +123,15 @@ int main()
          {0, 0, 0, 0, 0},
          {0, 0, 0, 1, 0},
         }
+        // {{1, 0, 0, 0},
+        //  {0, 0, 0, 4},
+        //  {0, 2, 0, 0},
+        //  {3, 0, 0, 0},
+        // }
+        //
+        // {{3, 0, 0},
+        //  {0, 0, 0},
+        //  {1, 0, 0}}
         );
 
     std::chrono::time_point<std::chrono::system_clock> start, end;
@@ -144,54 +153,12 @@ int main()
         steps = 0;
         imp.push_back(temp);
     }
-    vector<vector<int>> dist_mat = dist_matrix_calc(res, imp), dist_mat_int = dist_matrix_calc(res, res);
 
-    // P_all
-    vector<pair<LSC, pair<int, int>>> P_all;
-    for (int i = 0; i < res.size(); i++)
+    cout << "Solutions: \n";
+
+    for (auto &i : imp)
     {
-        P_all.push_back({res[i], {0, i}});
-    }
-
-    for (int i = 0; i < imp.size(); i++)
-    {
-        P_all.push_back({imp[i], {1, i}});
-    }
-
-    vector<pair<LSC, pair<int, int>>> new_pop;
-
-    sort(P_all.begin(), P_all.end(), [&](pair<LSC, pair<int, int>> &a, pair<LSC, pair<int, int>> &b)
-         { return a.first.CL() < b.first.CL(); });
-
-    // New pop
-    new_pop.push_back(P_all[0]);
-    P_all.erase(P_all.begin());
-
-    while (new_pop.size() < 5)
-    {
-        auto x = P_all[0];
-        int dist = INT32_MAX;
-        for (auto i : new_pop)
-        {
-            if (x.second.first == 0 && i.second.first == 0)
-                dist = min(dist, dist_mat_int[i.second.second][x.second.second]);
-            else
-            {
-                dist = min(dist, dist_mat[i.second.second][x.second.second]);
-            }
-        }
-        if (dist > 5 / 2)
-        {
-            new_pop.push_back(x);
-            P_all.erase(P_all.begin());
-        }
-    }
-
-    // cout << "Solutions: \n";
-
-    for (auto &i : new_pop)
-    {
-        i.first.printSquare();
+        i.printSquare();
         cout << "\n";
     }
 

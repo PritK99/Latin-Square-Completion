@@ -4,7 +4,7 @@ using namespace std;
 
 /**
  * @brief Performs a Best-First Search (BestFS) on the given Latin square coloring problem.
- * 
+ *
  * @param S The initial LSC instance to start the search from.
  */
 void BestFS(LSC S) {
@@ -37,20 +37,20 @@ void BestFS(LSC S) {
 
 int main() {
     LSC test(
-        // {{3, 0, 0, 0, 0},
-        //  {0, 0, 0, 2, 0},
-        //  {0, 0, 1, 0, 0},
-        //  {0, 0, 0, 0, 0},
-        //  {0, 0, 0, 1, 0},
-        // }
+        {{3, 0, 0, 0, 0},
+         {0, 0, 0, 2, 0},
+         {0, 0, 1, 0, 0},
+         {0, 0, 0, 0, 0},
+         {0, 0, 0, 1, 0},
+        }
         // {{3, 0, 0},
         //  {0, 0, 0},
         //  {1, 0, 0}}
-        {{1, 0, 0, 0},
-         {0, 0, 0, 0},
-         {0, 2, 0, 0},
-         {0, 0, 0, 0},
-        }
+        // {{1, 0, 0, 0},
+        //  {0, 0, 0, 4},
+        //  {0, 2, 0, 0},
+        //  {3, 0, 0, 0},
+        // }
     );
     test.printSquare();
     std::chrono::time_point<std::chrono::system_clock> start, end;

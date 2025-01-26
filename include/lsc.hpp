@@ -2,7 +2,7 @@
 #include <map>
 #include <vector>
 #include <set>
-#include <random>   
+#include <random>
 #include <algorithm>
 #include <queue>
 #include <stack>
@@ -16,7 +16,7 @@ class Compare;
 
 /**
  * @brief Searches for an element in a vector.
- * 
+ *
  * @tparam T Type of elements in the vector.
  * @param v The vector to search in.
  * @param e The element to find.
@@ -40,7 +40,7 @@ public:
 
     /**
      * @brief Adds an edge between two vertices.
-     * 
+     *
      * @param n1 The first vertex.
      * @param n2 The second vertex.
      */
@@ -61,7 +61,7 @@ public:
             cout << "\r\n"; // New line after each vertex
         }
     }
-}; 
+};
 
 /**
  * @brief Represents a Latin square coloring problem using graph coloring.
@@ -81,7 +81,7 @@ public:
 
     /**
      * @brief Constructor for initializing LSC with a partial Latin square.
-     * 
+     *
      * @param partial The initial partial Latin square.
      */
     LSC(vector<vector<int>> partial) {
@@ -105,7 +105,7 @@ public:
                 }
             }
         }
-        
+
         // Configure already filled cells
         for (int i = 0; i < x; i++) {
             for (int j = 0; j < x; j++) {
@@ -143,7 +143,8 @@ public:
         }
 
         // Randomly assign colors to remaining candidates
-        shuffle(Cand_set.begin(), Cand_set.end(), default_random_engine(time(0)));
+        // shuffle(Cand_set.begin(), Cand_set.end(), default_random_engine(time(0)));
+
         srand(time(0));
         for (auto& It : Cand_set) {
             if (D[It].size() != 0) {
@@ -159,11 +160,11 @@ public:
                 exit(1); // Exit if no colors are available
             }
         }
-    } 
+    }
 
     /**
      * @brief Moves a vertex from one color to another.
-     * 
+     *
      * @param v The vertex to move.
      * @param color1 The color to move from.
      * @param color2 The color to move to.
@@ -176,11 +177,11 @@ public:
 
     /**
      * @brief Computes the conflict level (CL) of the current state.
-     * 
+     *
      * @return The number of color conflicts.
      */
     int CL() {
-        int res = 0; 
+        int res = 0;
         for (auto& color_set : V) {
             auto It = color_set.second.begin();
             while (It != color_set.second.end()) {
@@ -213,7 +214,7 @@ public:
 
     /**
      * @brief Checks if the current state is a goal state.
-     * 
+     *
      * @return true if the conflict level is zero, indicating a valid solution.
      */
     bool GoalTest() {
@@ -233,7 +234,7 @@ class Compare {
 public:
     /**
      * @brief Overloads the comparison operator to sort by conflict level.
-     * 
+     *
      * @param a First LSC instance with its conflict level.
      * @param b Second LSC instance with its conflict level.
      * @return true if the conflict level of a is less than that of b.
@@ -245,13 +246,11 @@ public:
 
 /**
  * @brief Generates moves and adds new states to the queue.
- * 
+ *
  * @param Q The queue to add generated states.
  * @param visited Map tracking visited states.
  */
-void LSC
-
-::MoveGen(queue<LSC>& Q, map<vector<vector<int>>, int>& visited) {
+void LSC::MoveGen(queue<LSC>& Q, map<vector<vector<int>>, int>& visited) {
     vector<int> colors; // List of available colors
     for (int i = 1; i <= square.size(); i++) {
         colors.push_back(i);
@@ -278,7 +277,7 @@ void LSC
 
 /**
  * @brief Generates moves and adds new states to the stack.
- * 
+ *
  * @param Q The stack to add generated states.
  * @param visited Map tracking visited states.
  */
@@ -309,7 +308,7 @@ void LSC::MoveGen(stack<LSC>& Q, map<vector<vector<int>>, int>& visited) {
 
 /**
  * @brief Generates moves and adds new states to the priority queue.
- * 
+ *
  * @param Q The priority queue to add generated states.
  * @param visited Map tracking visited states.
  */
