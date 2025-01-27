@@ -222,6 +222,7 @@ public:
      * @brief Prints the current state of the Latin square.
      */
     void printSquare() {
+        cout << "\n";
         int x = square.size();
         for (int i = 0; i < x; i++) {
             for (int j = 0; j < x; j++) {
@@ -229,11 +230,12 @@ public:
             }
             cout << "\n"; // New line after each row
         }
+        cout << "\n";
     }
 };
 
 int main() {
-    LSC x(
+    LSC x = LSC(
     // 7x7
     // {{1, 0, 0, 0, 0, 0, 0},
     //  {0, 0, 0, 0, 0, 0, 0},
@@ -264,57 +266,64 @@ int main() {
     //  {0, 0, 0, 0, 0, 0, 0, 0, 8},
     //  {0, 0, 0, 0, 0, 0, 0, 0, 0}}
 
-    // 10x10
-    // {{1, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-    //  {0, 2, 0, 0, 0, 0, 0, 0, 0, 0},
-    //  {3, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-    //  {0, 0, 0, 4, 0, 0, 0, 0, 0, 0},
-    //  {0, 0, 0, 0, 0, 5, 0, 0, 0, 0},
-    //  {0, 0, 0, 0, 0, 0, 0, 0, 0, 6},
-    //  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-    //  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-    //  {0, 5, 0, 0, 0, 9, 0, 0, 0, 0},
-    //  {0, 0, 0, 0, 0, 0, 0, 0, 0, 10}}
-    //
+    //10x10
+    {{1, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+     {0, 2, 0, 0, 0, 0, 0, 0, 0, 0},
+     {3, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+     {0, 0, 0, 4, 0, 0, 0, 0, 0, 0},
+     {0, 0, 0, 0, 0, 5, 0, 0, 0, 0},
+     {0, 0, 0, 0, 0, 0, 0, 0, 0, 6},
+     {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+     {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+     {0, 5, 0, 0, 0, 9, 0, 0, 0, 0},
+     {0, 0, 0, 0, 0, 0, 0, 0, 0, 10}}
+
     // 11x11
-    {{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-     {0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-     {3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-     {0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0},
-     {0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0},
-     {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6},
-     {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-     {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-     {0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0},
-     {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-     {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 11}}
+    // {{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+    //  {0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+    //  {3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+    //  {0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0},
+    //  {0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0},
+    //  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6},
+    //  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+    //  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+    //  {0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0},
+    //  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+    //  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9}}
 
     );
 
     std::chrono::time_point<std::chrono::system_clock> start, end;
     start = std::chrono::system_clock::now();
 
-    const long int max_iterations = 100000; // Limit retries
-    long int attempts = 0;
-    while (true) {
-        LSC curr = LSC(x.square);
-        curr.gen_solns();
-        if (curr.count_zero() == 0) {
-            curr.printSquare();
-            break;
-        }
-        if (attempts % 1000 == 0) std::cout << "Attempt " << attempts << ": Remaining conflicts = " << curr.count_zero() << "\n";
-        attempts++;
-        if (attempts == max_iterations) {
-            cout << "Failed\n";
-            curr.printSquare();
-            break;
+    vector<LSC> res;
+
+    # pragma omp parallel for
+    for (int i=0; i<4; i++) {
+        long int max_iterations = 50000; // Limit retries
+        long int attempts = 0;
+        while (true) {
+            LSC curr = LSC(x.square);
+            curr.gen_solns();
+            if (curr.count_zero() == 0) {
+                curr.printSquare();
+                res.push_back(curr);
+                break;
+            }
+            // if (attempts % 1000 == 0) std::cout << "Attempt " << attempts << ": Remaining conflicts = " << curr.count_zero() << "\n";
+            attempts++;
+            if (attempts == max_iterations) {
+                cout << "Failed\n";
+                curr.printSquare();
+                break;
+            }
         }
     }
 
     end = std::chrono::system_clock::now();
     std::chrono::duration<double> elapsed_seconds = end - start;
     std::cout << "Elapsed time: " << elapsed_seconds.count() << "s\n";
+    std::cout << res.size() << "\n";
 
     return 0;
 }
