@@ -7,6 +7,7 @@
 #include <chrono>
 #include <ctime>
 #include <algorithm>
+#include <omp.h>
 
 using namespace std;
 
@@ -221,7 +222,7 @@ public:
     /**
      * @brief Prints the current state of the Latin square.
      */
-    void printSquare() {
+    void printSquare() const {
         cout << "\n";
         int x = square.size();
         for (int i = 0; i < x; i++) {
@@ -234,7 +235,25 @@ public:
     }
 };
 
-int main() {
+void printSquare(const vector<vector<int>>& square) {
+    cout << "\n";
+    int x = square.size();
+    for (int i = 0; i < x; i++) {
+        for (int j = 0; j < x; j++) {
+            cout << square[i][j] << " "; // Print each element
+        }
+        cout << "\n"; // New line after each row
+    }
+    cout << "\n";
+}
+
+int main(int argc, char *argv[]) {
+    int num_threads = 16; // Default number of threads
+    if (argc > 1)
+    {
+        num_threads = stoi(argv[1]);
+    }
+    omp_set_num_threads(num_threads);
     LSC x = LSC(
     // 7x7
     // {{1, 0, 0, 0, 0, 0, 0},
@@ -246,14 +265,14 @@ int main() {
     //  {0, 0, 0, 0, 0, 0, 0}}
 
     // 8x8
-    // {{1, 0, 0, 0, 0, 0, 0, 0},
-    //  {0, 2, 0, 0, 0, 0, 0, 0},
-    //  {3, 0, 0, 0, 0, 0, 0, 0},
-    //  {0, 0, 0, 4, 0, 0, 0, 0},
-    //  {0, 0, 0, 0, 0, 5, 0, 0},
-    //  {0, 0, 0, 0, 0, 0, 0, 6},
-    //  {0, 0, 0, 0, 0, 0, 0, 0},
-    //  {0, 0, 0, 0, 0, 0, 0, 8}}
+    {{1, 0, 0, 0, 0, 0, 0, 0},
+     {0, 2, 0, 0, 0, 0, 0, 0},
+     {3, 0, 0, 0, 0, 0, 0, 0},
+     {0, 0, 0, 4, 0, 0, 0, 0},
+     {0, 0, 0, 0, 0, 5, 0, 0},
+     {0, 0, 0, 0, 0, 0, 0, 6},
+     {0, 0, 0, 0, 0, 0, 0, 0},
+     {0, 0, 0, 0, 0, 0, 0, 8}}
 
     //9x9
     // {{1, 0, 0, 0, 0, 0, 0, 0, 0},
@@ -267,16 +286,16 @@ int main() {
     //  {0, 0, 0, 0, 0, 0, 0, 0, 0}}
 
     //10x10
-    {{1, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-     {0, 2, 0, 0, 0, 0, 0, 0, 0, 0},
-     {3, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-     {0, 0, 0, 4, 0, 0, 0, 0, 0, 0},
-     {0, 0, 0, 0, 0, 5, 0, 0, 0, 0},
-     {0, 0, 0, 0, 0, 0, 0, 0, 0, 6},
-     {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-     {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-     {0, 5, 0, 0, 0, 9, 0, 0, 0, 0},
-     {0, 0, 0, 0, 0, 0, 0, 0, 0, 10}}
+    // {{1, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+    //  {0, 2, 0, 0, 0, 0, 0, 0, 0, 0},
+    //  {3, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+    //  {0, 0, 0, 4, 0, 0, 0, 0, 0, 0},
+    //  {0, 0, 0, 0, 0, 5, 0, 0, 0, 0},
+    //  {0, 0, 0, 0, 0, 0, 0, 0, 0, 6},
+    //  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+    //  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+    //  {0, 5, 0, 0, 0, 9, 0, 0, 0, 0},
+    //  {0, 0, 0, 0, 0, 0, 0, 0, 0, 10}}
 
     // 11x11
     // {{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
@@ -296,25 +315,25 @@ int main() {
     std::chrono::time_point<std::chrono::system_clock> start, end;
     start = std::chrono::system_clock::now();
 
-    vector<LSC> res;
+    set<vector<vector<int>>> res;
 
     # pragma omp parallel for
-    for (int i=0; i<4; i++) {
+    for (int i=0; i<num_threads; i++) {
         long int max_iterations = 50000; // Limit retries
         long int attempts = 0;
         while (true) {
             LSC curr = LSC(x.square);
             curr.gen_solns();
             if (curr.count_zero() == 0) {
-                curr.printSquare();
-                res.push_back(curr);
+                // curr.printSquare();
+                res.insert(curr.square);
                 break;
             }
             // if (attempts % 1000 == 0) std::cout << "Attempt " << attempts << ": Remaining conflicts = " << curr.count_zero() << "\n";
             attempts++;
             if (attempts == max_iterations) {
-                cout << "Failed\n";
-                curr.printSquare();
+                // cout << "Failed\n";
+                // curr.printSquare();
                 break;
             }
         }
@@ -323,7 +342,10 @@ int main() {
     end = std::chrono::system_clock::now();
     std::chrono::duration<double> elapsed_seconds = end - start;
     std::cout << "Elapsed time: " << elapsed_seconds.count() << "s\n";
-    std::cout << res.size() << "\n";
+
+    for (vector<vector<int>> x: res) {
+        printSquare(x);
+    }
 
     return 0;
 }
