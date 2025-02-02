@@ -18,7 +18,7 @@ plits_par: src/plits_par.cpp include/plits.hpp
 	$(CC) -o plits_par src/plits_par.cpp -fopenmp -I include/
 
 mis: src/plits_par.cpp include/plits.hpp
-	$(CC) -o mis_par src/lsc-mis.cpp -fopenmp
+	$(CC) -o mis_par src/mis_par.cpp -fopenmp
 
 list:
 	@echo "List of Targets (Algorithms): "
@@ -27,6 +27,7 @@ list:
 	@echo "- bestfs (Best First Search)"
 	@echo "- plits_seq (Partial Legal & Illegal Tabu Search)"
 	@echo "- plits_par (Parallelised Partial Legal & Illegal Tabu Search)"
+	@echo "- mis_par (Parallelised Maximum Independent Set)"
 
 clean:
-	rm -f bfs dfs bestfs plits_seq plits_par mis
+	rm -f bfs dfs bestfs plits_seq plits_par mis_PAR
