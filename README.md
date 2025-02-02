@@ -1,14 +1,19 @@
-# Latin-Square-Completion
+# Latin-Square-Completion using Parallel Maximum Independent Set Algorithm
+
+<img src = "assets/img/latin_sq.png" alt= "latin square problem">
 
 ## Introduction
 
-A Latin square of order ```n``` is a ```nxn``` matrix consisting of n symbols (i.e., {1, 2, . . . , n}) in which each symbol occurs exactly once in each row and exactly once in each column. If some grids are empty, then the Latin square complete (LSC) problem of order n aims to complete the empty grids with n symbols to obtain an arbitrary legal Latin square.
+A **Latin Square** of order `n` is an `n x n` array filled with `n` distinct symbols, typically represented by the set `{1, 2, ..., n}`, such that each symbol appears exactly once in each row and each column. Formally, an `n x n` array `L = [l_ij]` is a Latin square if for all `i, j, k` in `{1, 2, ..., n}`:
 
-<img src = "assets/latinsq.jpg" alt= "latin square problem">
+- `l_ij != l_kj` for `i != k` (distinct symbols in every column),
+- `l_ij != l_ik` for `j != k` (distinct symbols in every row).
 
-## NP-Complete Problem
+**Latin Square Completion (LSC)** refers to the process of filling in an incomplete Latin square, where some entries are missing, while ensuring that the filled entries satisfy the Latin square properties. Specifically, given a partially filled `n x n` array `L = [l_ij]` with some missing entries, the goal is to fill in the missing entries with symbols from the set `{1, 2, ..., n}` such that the resulting array is a Latin square.
 
-Latin Square Completion is a Constraint Satisfaction Problem and hence is NP Complete in nature. This is because it can be solved only in non-deterministic polynomial time, but easy to verify in linear time (O(n)) time complexity. 
+## LSC as a Constraint Satisfaction Problem
+
+Latin Square Completion is a Constraint Satisfaction Problem and NP Complete in nature. This is because it can be solved only in non-deterministic polynomial time, but easy to verify in linear time (O(n)) time complexity. 
 
 It can be defined as a Constraint Satisfaction Problem (CSP) as follows: 
 
@@ -34,9 +39,8 @@ Here, the nodes represt the cells, and the edges represent the constraints. The 
 
 We reduce the search space by filling those cells for which the domain is not greater than 1. This allows us to significantly reduce the search space.
 
-3) Best First Search
+3) Parallel MIS Algorithm
 
-<img src = "assets/best-first.jpg" alt= "latin square problem">
 
 ## File Structure
 ```
@@ -144,6 +148,10 @@ https://github.com/PritK99/Latin-Square-Completion/assets/103848930/6131050e-931
 ### 5. 4x4 LSC using Heuristics and Reductions
 
 https://github.com/PritK99/Latin-Square-Completion/assets/103848930/01a084e4-61a1-4614-b01a-fa5425ecb1bf
+
+## Results
+
+<img src="assets/img/results.png" alt="results">
 
 ## References
 
