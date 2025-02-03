@@ -37,11 +37,10 @@ void BestFS(LSC S) {
 
 int main() {
     LSC test(
-        {{3, 0, 0, 0, 0},
-         {0, 0, 0, 2, 0},
-         {0, 0, 1, 0, 0},
-         {0, 0, 0, 0, 0},
-         {0, 0, 0, 1, 0},
+        {{1, 0, 0, 0},
+         {0, 0, 0, 0},
+         {0, 0, 0, 0},
+         {3, 0, 0, 0},
         }
         // {{3, 0, 0},
         //  {0, 0, 0},
@@ -53,6 +52,7 @@ int main() {
         // }
     );
     test.printSquare();
+    cout << "\n";
     std::chrono::time_point<std::chrono::system_clock> start, end;
     start = std::chrono::system_clock::now();
     BestFS(test);

@@ -203,7 +203,7 @@ public:
                 }
 
                 // Remove the cell from Cand_set
-                Cand_set.erase(remove(Cand_set.begin(), Cand_set.end(), cell), Cand_set.end());
+                temp_set.erase(remove(temp_set.begin(), temp_set.end(), cell), temp_set.end());
             }
         }
     }
@@ -255,6 +255,12 @@ int main(int argc, char *argv[]) {
     }
     omp_set_num_threads(num_threads);
     LSC x = LSC(
+        {{1, 0, 0, 0},
+         {0, 0, 0, 0},
+         {0, 0, 0, 0},
+         {3, 0, 0, 0},
+        }
+    
     // 7x7
     // {{1, 0, 0, 0, 0, 0, 0},
     //  {0, 0, 0, 0, 0, 0, 0},
@@ -265,14 +271,14 @@ int main(int argc, char *argv[]) {
     //  {0, 0, 0, 0, 0, 0, 0}}
 
     // 8x8
-    {{1, 0, 0, 0, 0, 0, 0, 0},
-     {0, 2, 0, 0, 0, 0, 0, 0},
-     {3, 0, 0, 0, 0, 0, 0, 0},
-     {0, 0, 0, 4, 0, 0, 0, 0},
-     {0, 0, 0, 0, 0, 5, 0, 0},
-     {0, 0, 0, 0, 0, 0, 0, 6},
-     {0, 0, 0, 0, 0, 0, 0, 0},
-     {0, 0, 0, 0, 0, 0, 0, 8}}
+    // {{1, 0, 0, 0, 0, 0, 0, 0},
+    //  {0, 2, 0, 0, 0, 0, 0, 0},
+    //  {3, 0, 0, 0, 0, 0, 0, 0},
+    //  {0, 0, 0, 4, 0, 0, 0, 0},
+    //  {0, 0, 0, 0, 0, 5, 0, 0},
+    //  {0, 0, 0, 0, 0, 0, 0, 6},
+    //  {0, 0, 0, 0, 0, 0, 0, 0},
+    //  {0, 0, 0, 0, 0, 0, 0, 8}}
 
     //9x9
     // {{1, 0, 0, 0, 0, 0, 0, 0, 0},
@@ -341,11 +347,14 @@ int main(int argc, char *argv[]) {
 
     end = std::chrono::system_clock::now();
     std::chrono::duration<double> elapsed_seconds = end - start;
-    std::cout << "Elapsed time: " << elapsed_seconds.count() << "s\n";
+
+    cout << "Unique solutions: \n";
 
     for (vector<vector<int>> x: res) {
         printSquare(x);
     }
+
+    std::cout << "Elapsed time: " << elapsed_seconds.count() << "s\n";
 
     return 0;
 }

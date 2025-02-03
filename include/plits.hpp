@@ -341,6 +341,17 @@ public:
         return CL() == 0; // Goal if no conflicts
     }
 
+    int count_zero() {
+        int res = 0;
+        for (int i=0; i<square.size(); i++) {
+            for (int j=0; j<square.size(); j++) {
+                if (square[i][j] == 0) res++;
+            }
+        }
+
+        return res;
+    }
+
     void MoveGen(priority_queue<pair<LSC, int>, vector<pair<LSC, int>>, Compare>& Q, map<vector<vector<int>>, int>& visited);
     void MoveGen(int phi, int tt, priority_queue<pair<LSC, int>, vector<pair<LSC, int>>, Compare>& Q, map<vector<vector<int>>, int>& tabu);
 };
@@ -420,4 +431,16 @@ void LSC::MoveGen(int phi, int tt, priority_queue<pair<LSC, int>, vector<pair<LS
             }
         }
     }
+}
+
+void printSquare(const vector<vector<int>>& square) {
+    cout << "\n";
+    int x = square.size();
+    for (int i = 0; i < x; i++) {
+        for (int j = 0; j < x; j++) {
+            cout << square[i][j] << " "; // Print each element
+        }
+        cout << "\n"; // New line after each row
+    }
+    cout << "\n";
 }

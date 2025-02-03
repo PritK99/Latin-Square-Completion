@@ -81,17 +81,17 @@ int main(int argc, char *argv[])
     cout << "Number of threads: " << omp_get_max_threads() << endl;
 
     LSC test(
-        {{3, 0, 0, 0, 0},
-         {0, 0, 0, 2, 0},
-         {0, 0, 1, 0, 0},
-         {0, 0, 0, 0, 0},
-         {0, 0, 0, 1, 0},
-        }
-        // {{1, 0, 0, 0},
-        //  {0, 0, 0, 4},
-        //  {0, 2, 0, 0},
-        //  {3, 0, 0, 0},
+        // {{3, 0, 0, 0, 0},
+        //  {0, 0, 0, 2, 0},
+        //  {0, 0, 1, 0, 0},
+        //  {0, 0, 0, 0, 0},
+        //  {0, 0, 0, 1, 0},
         // }
+        {{1, 0, 0, 0},
+         {0, 0, 0, 0},
+         {0, 0, 0, 0},
+         {3, 0, 0, 0},
+        }
         // {{3, 0, 0},
         //  {0, 0, 0},
         //  {1, 0, 0}}
@@ -106,7 +106,7 @@ int main(int argc, char *argv[])
     //     i.printSquare();
     //     cout << "\n";
     // }
-    vector<LSC> imp;
+    set<vector<vector<int>>> imp;
     int global_steps = 0;
     #pragma omp parallel for
     for (LSC &i : res)
@@ -115,14 +115,15 @@ int main(int argc, char *argv[])
         LSC temp = PLITS(i, steps);
         #pragma omp critical
         global_steps += steps;
-        imp.push_back(temp);
+        if (temp.count_zero() == 0)
+            imp.insert(temp.square);
     }
 
-    cout << "Solutions: \n";
+    cout << "Unique solutions: \n";
 
     for (auto &i : imp)
     {
-        i.printSquare();
+        printSquare(i);
         cout << "\n";
     }
 

@@ -1,6 +1,6 @@
 CC = g++
 
-all: bfs dfs bestfs plits_seq plits_par
+all: bfs dfs bestfs plits_seq plits_par mis_par
 
 bfs: src/bfs.cpp include/lsc.hpp
 	$(CC) -o bfs src/bfs.cpp -I include/
@@ -17,7 +17,7 @@ plits_seq: src/plits_seq.cpp include/plits.hpp
 plits_par: src/plits_par.cpp include/plits.hpp
 	$(CC) -o plits_par src/plits_par.cpp -fopenmp -I include/
 
-mis: src/plits_par.cpp include/plits.hpp
+mis_par: src/mis_par.cpp
 	$(CC) -o mis_par src/mis_par.cpp -fopenmp
 
 list:
@@ -27,7 +27,7 @@ list:
 	@echo "- bestfs (Best First Search)"
 	@echo "- plits_seq (Partial Legal & Illegal Tabu Search)"
 	@echo "- plits_par (Parallelised Partial Legal & Illegal Tabu Search)"
-	@echo "- mis_par (Parallelised Maximum Independent Set)"
+	@echo "- mis_par (Parallelised Maximal Independent Set (MIS) algorithm)"
 
 clean:
-	rm -f bfs dfs bestfs plits_seq plits_par mis_PAR
+	rm -f bfs dfs bestfs plits_seq plits_par mis_par

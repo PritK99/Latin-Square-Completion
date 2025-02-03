@@ -37,7 +37,6 @@ void DFS(LSC S)
     // cout << "Soln\n";
     if (solved)
     {
-        cout << "Steps taken: " << steps << "\n";
         curr.printSquare();
     }
 }
@@ -51,16 +50,17 @@ int main()
         //  {0, 0, 0, 0, 0},
         //  {0, 0, 0, 1, 0},
         // }
-        // {{3, 0, 0},
-        //  {0, 0, 0},
-        //  {1, 0, 0}}
-        {{1, 0, 0, 0},
-         {0, 0, 0, 4},
-         {0, 2, 0, 0},
-         {3, 0, 0, 0},
-        }
-         );
+        {{3, 0, 0},
+         {0, 0, 0},
+         {1, 0, 0}}
+        // {{1, 0, 0, 0},
+        //  {0, 0, 0, 0},
+        //  {0, 0, 0, 0},
+        //  {3, 0, 0, 0},
+        // }
+    );
     test.printSquare();
+    cout << "\n";
     std::chrono::time_point<std::chrono::system_clock> start, end;
     start = std::chrono::system_clock::now();
     DFS(test);
