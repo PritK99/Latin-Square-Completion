@@ -72,7 +72,7 @@ Each extracted $I$ gets a distinct $c$, ensuring all vertices are colored while 
 
 ### Proposed solution's Architecture
 
-![alt text](arch.png)
+![alt text](./assets/img/arch.png)
 
 ## File Structure
 ```
