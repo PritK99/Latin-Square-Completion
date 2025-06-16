@@ -1,3 +1,5 @@
+#include <climits>
+#include <cstdio>
 #include <iostream>
 #include <map>
 #include <vector>
@@ -8,6 +10,8 @@
 #include <ctime>
 #include <algorithm>
 #include <omp.h>
+#include <fstream>
+#include <filesystem>
 
 using namespace std;
 
@@ -46,6 +50,11 @@ public:
     void add_edge(pair<int, int> n1, pair<int, int> n2) {
         adj_list[n1].push_back(n2); // Add n2 to n1's adjacency list
         adj_list[n2].push_back(n1); // Add n1 to n2's adjacency list
+    }
+
+    void remove_edge(pair<int, int> n1, pair<int, int> n2) {
+        adj_list[n1].erase(remove(adj_list[n1].begin(), adj_list[n1].end(), n2), adj_list[n1].end()); // Remove n2 from n1's adjacency list
+        adj_list[n2].erase(remove(adj_list[n2].begin(), adj_list[n2].end(), n1), adj_list[n2].end()); // Remove n1 from n2's adjacency list
     }
 
     /**
@@ -96,6 +105,7 @@ public:
                     add_edge({i, j}, {i, k}); // Add horizontal edges
                     add_edge({j, i}, {k, i}); // Add vertical edges
                 }
+
                 if (square[i][j] == 0) {
                     Cand_set.push_back({i, j}); // Add empty cells to candidate set
                     for (int k = 1; k <= x; k++) {
@@ -104,13 +114,13 @@ public:
                 }
             }
         }
-
-        // Configure already filled cells
         for (int i = 0; i < x; i++) {
             for (int j = 0; j < x; j++) {
                 if (square[i][j] != 0) {
-                    for (auto It : adj_list[{i, j}]) {
+                    vector<pair<int, int>> list = adj_list[{i, j}];
+                    for (pair<int, int> It : list) {
                         D[It].erase(square[i][j]); // Remove filled color from adjacent cells
+                        remove_edge(It, make_pair(i, j));
                     }
                     V[square[i][j]].insert({i, j}); // Assign the filled color
                 }
@@ -136,6 +146,13 @@ public:
                         pair<int, int> n1 = {i, j};
                         // Remove the cell from the candidate set
                         Cand_set.erase(remove(Cand_set.begin(), Cand_set.end(), n1), Cand_set.end());
+
+                        // Update graph
+                        vector<pair<int, int>> list = adj_list[n1];
+                        for (pair<int, int> It : list) {
+                            D[It].erase(square[i][j]); // Remove filled color from adjacent cells
+                            remove_edge(It, n1);
+                        }
                     }
                 }
             }
@@ -235,126 +252,67 @@ public:
     }
 };
 
-void printSquare(const vector<vector<int>>& square) {
-    cout << "\n";
-    int x = square.size();
-    for (int i = 0; i < x; i++) {
-        for (int j = 0; j < x; j++) {
-            cout << square[i][j] << " "; // Print each element
-        }
-        cout << "\n"; // New line after each row
+std::vector<std::vector<int>> read_LSC(const std::string& filename) {
+    std::ifstream infile(filename);
+    if (!infile) {
+        std::cerr << "Error: Could not open file " << filename << "\n";
+        exit(1);
     }
-    cout << "\n";
+
+    int n;
+    infile >> n;
+    std::vector<std::vector<int>> square(n, std::vector<int>(n));
+    for (int i = 0; i < n; ++i)
+        for (int j = 0; j < n; ++j)
+            infile >> square[i][j];
+    return square;
 }
 
 int main(int argc, char *argv[]) {
-    int num_threads = 16; // Default number of threads
-    if (argc > 1)
-    {
-        num_threads = stoi(argv[1]);
+    if (argc != 2) {
+        std::cerr << "Usage: " << argv[0] << " <filename>\n";
+        return 1;
     }
-    omp_set_num_threads(num_threads);
-    LSC x = LSC(
-        {{1, 0, 0, 0},
-         {0, 0, 0, 0},
-         {0, 0, 0, 0},
-         {3, 0, 0, 0},
-        }
-    
-    // 7x7
-    // {{1, 0, 0, 0, 0, 0, 0},
-    //  {0, 0, 0, 0, 0, 0, 0},
-    //  {3, 0, 0, 0, 0, 0, 0},
-    //  {0, 0, 0, 0, 0, 0, 0},
-    //  {0, 0, 0, 0, 0, 0, 0},
-    //  {0, 0, 0, 0, 0, 0, 0},
-    //  {0, 0, 0, 0, 0, 0, 0}}
 
-    // 8x8
-    // {{1, 0, 0, 0, 0, 0, 0, 0},
-    //  {0, 2, 0, 0, 0, 0, 0, 0},
-    //  {3, 0, 0, 0, 0, 0, 0, 0},
-    //  {0, 0, 0, 4, 0, 0, 0, 0},
-    //  {0, 0, 0, 0, 0, 5, 0, 0},
-    //  {0, 0, 0, 0, 0, 0, 0, 6},
-    //  {0, 0, 0, 0, 0, 0, 0, 0},
-    //  {0, 0, 0, 0, 0, 0, 0, 8}}
+    std::string filename = argv[1];
+    vector<vector<int>> square = read_LSC(filename);
 
-    //9x9
-    // {{1, 0, 0, 0, 0, 0, 0, 0, 0},
-    //  {0, 2, 0, 0, 0, 0, 0, 0, 0},
-    //  {3, 0, 0, 0, 0, 0, 0, 0, 0},
-    //  {0, 0, 0, 4, 0, 0, 0, 0, 0},
-    //  {0, 0, 0, 0, 0, 5, 0, 0, 0},
-    //  {0, 0, 0, 0, 0, 0, 0, 0, 0},
-    //  {0, 0, 0, 0, 0, 0, 0, 0, 0},
-    //  {0, 0, 0, 0, 0, 0, 0, 0, 8},
-    //  {0, 0, 0, 0, 0, 0, 0, 0, 0}}
+    std::string filename_basename = std::filesystem::path(filename).filename().string(); // just "LSC-..." without the path
 
-    //10x10
-    // {{1, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-    //  {0, 2, 0, 0, 0, 0, 0, 0, 0, 0},
-    //  {3, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-    //  {0, 0, 0, 4, 0, 0, 0, 0, 0, 0},
-    //  {0, 0, 0, 0, 0, 5, 0, 0, 0, 0},
-    //  {0, 0, 0, 0, 0, 0, 0, 0, 0, 6},
-    //  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-    //  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-    //  {0, 5, 0, 0, 0, 9, 0, 0, 0, 0},
-    //  {0, 0, 0, 0, 0, 0, 0, 0, 0, 10}}
+    LSC x = LSC(square);
 
-    // 11x11
-    // {{1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-    //  {0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-    //  {3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-    //  {0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0},
-    //  {0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0},
-    //  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6},
-    //  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-    //  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-    //  {0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0},
-    //  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-    //  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9}}
+    x.printSquare();
 
-    );
+    std::chrono::time_point<std::chrono::system_clock> start = std::chrono::system_clock::now();
 
-    std::chrono::time_point<std::chrono::system_clock> start, end;
-    start = std::chrono::system_clock::now();
+    bool completed = false;
+    int max_iterations = 1e6; // Limit retries
 
-    set<vector<vector<int>>> res;
+    # pragma omp parallel for shared(completed, max_iterations)
+    for (auto i=0; i<max_iterations; i++) {
+        LSC curr = LSC(x.square);
 
-    # pragma omp parallel for
-    for (int i=0; i<num_threads; i++) {
-        long int max_iterations = 50000; // Limit retries
-        long int attempts = 0;
-        while (true) {
-            LSC curr = LSC(x.square);
-            curr.gen_solns();
-            if (curr.count_zero() == 0) {
-                // curr.printSquare();
-                res.insert(curr.square);
-                break;
-            }
-            // if (attempts % 1000 == 0) std::cout << "Attempt " << attempts << ": Remaining conflicts = " << curr.count_zero() << "\n";
-            attempts++;
-            if (attempts == max_iterations) {
-                // cout << "Failed\n";
-                // curr.printSquare();
-                break;
+        if (completed) continue;
+        curr.gen_solns();
+
+        if (curr.count_zero() == 0) {
+            #pragma omp critical
+            {
+                completed = true;
+                curr.printSquare();
+                std::chrono::time_point<std::chrono::system_clock> end = std::chrono::system_clock::now();
+                std::chrono::duration<double> elapsed_seconds = end - start;
+
+                std::ofstream csvOut("results/times.csv", std::ios::app); // append mode
+                if (csvOut.is_open()) {
+                    csvOut << filename << "," << elapsed_seconds.count() << "\n";
+                    csvOut.close();
+                }
+
+                std::cout << "Elapsed time: " << elapsed_seconds.count() << "s\n";
             }
         }
     }
-
-    end = std::chrono::system_clock::now();
-    std::chrono::duration<double> elapsed_seconds = end - start;
-
-    cout << "Unique solutions: \n";
-
-    for (vector<vector<int>> x: res) {
-        printSquare(x);
-    }
-
-    std::cout << "Elapsed time: " << elapsed_seconds.count() << "s\n";
 
     return 0;
 }
